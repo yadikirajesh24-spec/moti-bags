@@ -243,6 +243,31 @@
     .lead-phone { font-size:0.82rem; color:var(--text-mid); flex-shrink:0; }
     .lead-time  { font-size:0.7rem; color:#bbb; flex-shrink:0; }
 
+    /* ORDER CARDS */
+    .order-card { border:1px solid var(--border); border-radius:12px; margin-bottom:1rem; overflow:hidden; background:var(--white); }
+    .order-card-head { display:flex; align-items:center; justify-content:space-between; padding:0.85rem 1rem; background:var(--bg-alt); border-bottom:1px solid var(--border); gap:0.8rem; flex-wrap:wrap; }
+    .order-cust { display:flex; align-items:center; gap:10px; }
+    .order-avatar { width:36px; height:36px; border-radius:50%; background:var(--gold-lt); border:1.5px solid rgba(168,134,42,0.3); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .order-name  { font-weight:700; font-size:0.87rem; color:var(--text); }
+    .order-phone { font-size:0.75rem; color:var(--text-mid); }
+    .order-meta  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .order-time-badge { font-size:0.68rem; color:var(--text-lt); }
+    .btn-wa-chat { background:#25D366; color:#fff; border:none; font-size:0.72rem; font-weight:700; padding:5px 12px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
+    .btn-wa-chat:hover { background:#1da851; }
+    .btn-order-del { background:rgba(184,41,30,0.07); color:var(--danger); border:1px solid rgba(184,41,30,0.2); font-size:0.7rem; padding:4px 10px; border-radius:6px; cursor:pointer; font-family:'Inter',sans-serif; }
+    .btn-order-del:hover { background:rgba(184,41,30,0.14); }
+    .order-items { padding:0.85rem 1rem; display:flex; flex-direction:column; gap:0.7rem; }
+    .order-item-row { display:flex; align-items:center; gap:10px; }
+    .order-item-img { width:52px; height:52px; border-radius:7px; flex-shrink:0; overflow:hidden; background:var(--bg-alt); display:flex; align-items:center; justify-content:center; border:1px solid var(--border); }
+    .order-item-img img { width:100%; height:100%; object-fit:cover; }
+    .order-item-info { flex:1; min-width:0; }
+    .order-item-name  { font-size:0.84rem; font-weight:600; color:var(--text); }
+    .order-item-meta  { font-size:0.73rem; color:var(--text-mid); margin-top:1px; }
+    .order-item-price { font-size:0.8rem; color:var(--red); font-weight:600; flex-shrink:0; }
+    .order-card-foot { padding:0.7rem 1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:var(--bg); font-size:0.8rem; }
+    .order-total-label { color:var(--text-mid); }
+    .order-total-val { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--red); }
+
     @media (max-width:900px) {
       .stats-row { grid-template-columns: 1fr 1fr; }
     }
@@ -310,6 +335,10 @@
       <a href="#" id="sn-house" onclick="showPanel('house');return false">
         <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 10 L10 4 L17 10 V17 H3 V10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><rect x="8" y="13" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1.2"/></svg>
         House Warming <span class="cnt" id="sc-house">0</span>
+      </a>
+      <a href="#" id="sn-orders" onclick="showPanel('orders');return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v2a2 2 0 004 0V2" stroke="currentColor" stroke-width="1.4"/><line x1="6" y1="9" x2="14" y2="9" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="15" x2="10" y2="15" stroke="currentColor" stroke-width="1.2"/></svg>
+        Customer Orders <span class="cnt" id="sc-orders">0</span>
       </a>
       <a href="#" id="sn-leads" onclick="showPanel('leads');return false">
         <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="13" x2="11" y2="13" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -500,6 +529,18 @@
           <button class="btn-add" onclick="addProduct('house')">+ Add House Warming Bag</button>
         </div>
         <div class="list-box"><div class="lb-head"><h3>House Warming Products</h3><span class="lb-count" id="hc-lbl">0 products</span></div><div id="list-house"></div></div>
+      </div>
+
+      <!-- ORDERS PANEL -->
+      <div class="s-panel" id="p-orders">
+        <div class="leads-box">
+          <div class="lb-head">
+            <h3>Customer Orders</h3>
+            <button onclick="clearOrders()" style="background:rgba(184,41,30,0.07);color:var(--danger);border:1.5px solid rgba(184,41,30,0.2);font-size:0.78rem;padding:5px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Inter',sans-serif;">Clear All</button>
+          </div>
+          <p style="font-size:0.81rem;color:var(--text-mid);margin-bottom:1.2rem;">Orders placed by customers through the website cart and sent via WhatsApp.</p>
+          <div id="orders-list"></div>
+        </div>
       </div>
 
       <!-- LEADS PANEL -->
@@ -793,9 +834,90 @@
     toast('Leads cleared');
   }
 
+  /* ── ORDERS ── */
+  const ORDERS_KEY = 'motibags_orders';
+  function getOrders() {
+    try { return JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]'); } catch(e) { return []; }
+  }
+  function deleteOrder(id) {
+    if (!confirm('Delete this order?')) return;
+    const orders = getOrders().filter(o => o.id !== id);
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    renderOrders();
+    refreshOrderCount();
+    toast('Order deleted');
+  }
+  function clearOrders() {
+    if (!confirm('Clear all orders?')) return;
+    localStorage.removeItem(ORDERS_KEY);
+    renderOrders();
+    refreshOrderCount();
+    toast('Orders cleared');
+  }
+  function refreshOrderCount() {
+    const n = getOrders().length;
+    const el = document.getElementById('sc-orders');
+    if (el) el.textContent = n;
+  }
+  function renderOrders() {
+    const orders = getOrders();
+    const el = document.getElementById('orders-list');
+    if (!el) return;
+    refreshOrderCount();
+    if (orders.length === 0) {
+      el.innerHTML = `<div class="no-prods"><div class="np-icon">${BAG_SVG}</div><p>No orders yet. They appear here when customers send their cart via WhatsApp.</p></div>`;
+      return;
+    }
+    const BAG_SM = `<svg width="24" height="24" viewBox="0 0 30 34" fill="none"><path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/><rect x="2" y="12" width="26" height="20" rx="3" stroke="#C9A84C" stroke-width="2"/></svg>`;
+    const WA_SVG = `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`;
+    el.innerHTML = orders.slice().reverse().map(order => {
+      let totalVal = 0; let canCalc = true;
+      order.items.forEach(item => {
+        const n = parseFloat(String(item.price).replace(/[^0-9.]/g, ''));
+        if (isNaN(n)) canCalc = false; else totalVal += n * item.qty;
+      });
+      const totalItems = order.items.reduce((s, i) => s + i.qty, 0);
+      const waLink = order.phone ? `https://wa.me/${order.phone.replace(/[^0-9]/g,'')}` : '#';
+      return `<div class="order-card">
+        <div class="order-card-head">
+          <div class="order-cust">
+            <div class="order-avatar">${USER_SVG}</div>
+            <div>
+              <div class="order-name">${esc(order.name)}</div>
+              <div class="order-phone">${esc(order.phone||'')}</div>
+            </div>
+          </div>
+          <div class="order-meta">
+            <span class="order-time-badge">${order.time||''}</span>
+            ${order.phone ? `<a class="btn-wa-chat" href="${waLink}" target="_blank">${WA_SVG} Chat</a>` : ''}
+            <button class="btn-order-del" onclick="deleteOrder('${order.id}')">Delete</button>
+          </div>
+        </div>
+        <div class="order-items">
+          ${order.items.map(item => `
+            <div class="order-item-row">
+              <div class="order-item-img">
+                ${item.img ? `<img src="${esc(item.img)}" alt="" onerror="this.style.display='none'">` : BAG_SM}
+              </div>
+              <div class="order-item-info">
+                <div class="order-item-name">${esc(item.name)}</div>
+                <div class="order-item-meta">${esc(item.cat)} &mdash; Qty: ${item.qty}</div>
+              </div>
+              <div class="order-item-price">${esc(item.price)}</div>
+            </div>`).join('')}
+        </div>
+        <div class="order-card-foot">
+          <span class="order-total-label">${totalItems} bag${totalItems!==1?'s':''}</span>
+          <span class="order-total-val">${canCalc ? '₹'+totalVal : 'As quoted'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
   function refreshAll() {
     CATS.forEach(renderList);
     renderLeads();
+    renderOrders();
     const data = getData();
     document.getElementById('sn-w').textContent = (data.wedding||[]).length;
     document.getElementById('sn-b').textContent = (data.birthday||[]).length;
@@ -805,14 +927,14 @@
 
   /* ── PANEL SWITCH ── */
   function showPanel(name) {
-    const allPanels = ['wedding','birthday','naming','house','leads','settings'];
+    const allPanels = ['wedding','birthday','naming','house','orders','leads','settings'];
     allPanels.forEach(p => {
       const el = document.getElementById('p-' + p);
       const sn = document.getElementById('sn-' + p);
       if (el) el.classList.toggle('active', p === name);
       if (sn) sn.classList.toggle('active', p === name);
     });
-    const titles = { wedding:'Wedding Bags', birthday:'Birthday Bags', naming:'Naming Ceremony', house:'House Warming', leads:'Customer Leads', settings:'Settings' };
+    const titles = { wedding:'Wedding Bags', birthday:'Birthday Bags', naming:'Naming Ceremony', house:'House Warming', orders:'Customer Orders', leads:'Customer Leads', settings:'Settings' };
     document.getElementById('topbar-title').textContent = titles[name] || name;
   }
 
@@ -847,7 +969,8 @@
 
   /* ── SYNC LEADS FROM INDEX ── */
   window.addEventListener('storage', function(e) {
-    if (e.key === LEADS_KEY) renderLeads();
+    if (e.key === LEADS_KEY)   renderLeads();
+    if (e.key === ORDERS_KEY)  { renderOrders(); refreshOrderCount(); }
   });
 
   /* ── INIT CLOUDINARY SETTINGS FIELDS ── */
