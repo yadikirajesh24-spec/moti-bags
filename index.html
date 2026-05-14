@@ -1063,15 +1063,30 @@
 
   function dispatchCartWA(name, phone) {
     saveLead(name, phone);
-    let msg = `Hi Moti Bags!\n\nName: ${name}\nPhone: ${phone}\n\n*My Cart Order:*\n`;
+
+    // Build order summary page URL (self-contained — all data encoded in the hash)
+    const orderData = {
+      name, phone,
+      time: new Date().toLocaleString('en-IN'),
+      items: cart.map(item => ({
+        name:  item.name,
+        cat:   CAT_LABELS[item.cat],
+        price: item.price,
+        qty:   item.qty,
+        img:   (item.img && item.img.startsWith('http')) ? item.img : ''
+      }))
+    };
+    const encoded    = btoa(unescape(encodeURIComponent(JSON.stringify(orderData))));
+    const summaryUrl = window.location.origin + '/order.html#' + encoded;
+
+    // Compose WhatsApp message
+    let msg = `Hi Moti Bags!\n\nName: ${name}\nPhone: ${phone}\n\n*My Order:*\n`;
     cart.forEach((item, i) => {
-      msg += `\n${i + 1}. *${item.name}* (${CAT_LABELS[item.cat]})\n`;
-      msg += `   Qty: ${item.qty} bag${item.qty > 1 ? 's' : ''} — ${item.price}/bag\n`;
-      if (item.img && item.img.startsWith('http')) {
-        msg += `   Photo: ${item.img}\n`;
-      }
+      msg += `\n${i + 1}. *${item.name}* (${CAT_LABELS[item.cat]}) — Qty: ${item.qty} — ${item.price}/bag`;
     });
-    msg += `\nPlease confirm availability and share payment details. Thank you!`;
+    msg += `\n\n*View full order with bag photos:*\n${summaryUrl}`;
+    msg += `\n\nPlease confirm availability and share payment details. Thank you!`;
+
     window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank');
   }
 
