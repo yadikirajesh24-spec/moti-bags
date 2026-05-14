@@ -888,7 +888,10 @@
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
     <h3>Your Cart <span class="cart-head-count" id="cartHeadCount">0 items</span></h3>
-    <button class="cart-close" onclick="closeCart()">&#x2715;</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="clearCartBtn" onclick="clearCart()" style="display:none;background:none;border:none;color:var(--text-lt);font-size:0.72rem;cursor:pointer;text-decoration:underline;font-family:'Inter',sans-serif;">Clear all</button>
+      <button class="cart-close" onclick="closeCart()">&#x2715;</button>
+    </div>
   </div>
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-foot" id="cartFoot" style="display:none">
@@ -968,6 +971,13 @@
     renderCart();
   }
 
+  function clearCart() {
+    if (!cart.length) return;
+    cart = [];
+    updateCartUI();
+    renderCart();
+  }
+
   function updateQty(productId, delta) {
     const item = cart.find(i => i.id === productId);
     if (!item) return;
@@ -1008,6 +1018,9 @@
     if (!body) return;
     const totalItems = cart.reduce((s, i) => s + i.qty, 0);
     headCount.textContent = totalItems + ' item' + (totalItems !== 1 ? 's' : '');
+    const clearBtn = document.getElementById('clearCartBtn');
+    if (clearBtn) clearBtn.style.display = cart.length ? 'inline' : 'none';
+
     if (cart.length === 0) {
       foot.style.display = 'none';
       body.innerHTML = `<div class="cart-empty">
