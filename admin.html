@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moti Bags – Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:       #B8291E;
+      --red-dark:  #8B1A12;
+      --red-deep:  #3D0D08;
+      --gold:      #C9A84C;
+      --gold-dark: #A8862A;
+      --gold-lt:   #F8F0DC;
+      --white:     #FFFFFF;
+      --bg:        #FAFAF8;
+      --bg-alt:    #F4F1EC;
+      --border:    #E8E0D0;
+      --text:      #1A1008;
+      --text-mid:  #6B5B45;
+      --success:   #1A7A3C;
+      --danger:    #B8291E;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(150deg, var(--red-deep) 0%, var(--red-dark) 55%, var(--red) 100%);
+      padding: 1rem;
+    }
+    .login-box {
+      background: var(--white); border-radius: 20px; padding: 3rem 2.5rem;
+      width: 100%; max-width: 390px; text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      border-top: 4px solid var(--gold);
+    }
+    .login-logo { margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .login-logo-text { text-align: left; }
+    .login-logo-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; line-height: 1; }
+    .login-logo-title .lm { color: var(--red); font-weight: 900; }
+    .login-logo-title .lb { color: var(--gold-dark); font-weight: 700; }
+    .login-logo-sub { font-size: 0.6rem; color: var(--text-mid); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+    .login-box h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--red-dark); margin-bottom: 0.3rem; }
+    .login-box p  { font-size: 0.82rem; color: var(--text-mid); margin-bottom: 2rem; }
+    .login-box input {
+      width: 100%; padding: 12px 16px; border: 2px solid var(--border);
+      border-radius: 10px; font-size: 0.95rem; font-family: 'Inter', sans-serif;
+      outline: none; text-align: center; letter-spacing: 4px; margin-bottom: 1rem;
+      transition: border-color 0.2s; background: var(--bg);
+    }
+    .login-box input:focus { border-color: var(--red); }
+    .btn-login {
+      width: 100%; background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: var(--white); font-size: 1rem; font-weight: 700;
+      padding: 13px; border-radius: 50px; border: none; cursor: pointer; transition: opacity 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-login:hover { opacity: 0.88; }
+    .login-err { color: var(--danger); font-size: 0.82rem; margin-top: 0.5rem; display: none; }
+    .login-hint { font-size: 0.72rem; color: #aaa; margin-top: 1.4rem; }
+
+    /* ── LAYOUT ── */
+    .admin-wrap { display: none; }
+    .admin-wrap.visible { display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: linear-gradient(175deg, var(--red-deep) 0%, #5C1810 100%);
+      display: flex; flex-direction: column; padding: 1.5rem 0;
+    }
+    .sb-logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 1.4rem 1.5rem; border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    .sb-logo-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; }
+    .sb-logo-name .lm { color: var(--gold); }
+    .sb-logo-name .lb { color: rgba(201,168,76,0.7); }
+    .sb-logo-sub  { font-size: 0.56rem; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+    .sb-nav { flex: 1; padding: 0.8rem 0; }
+    .sb-nav a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 1.4rem; color: rgba(255,255,255,0.6); text-decoration: none;
+      font-size: 0.85rem; font-weight: 500; transition: all 0.2s; position: relative;
+    }
+    .sb-nav a:hover, .sb-nav a.active { background: rgba(201,168,76,0.12); color: var(--gold); }
+    .sb-nav a.active::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold); border-radius:0 3px 3px 0; }
+    .sb-nav a .cnt { margin-left:auto; background:var(--gold); color:var(--red-deep); font-size:0.65rem; font-weight:800; padding:2px 7px; border-radius:10px; min-width:22px; text-align:center; }
+    .sb-nav-icon { width:16px; height:16px; flex-shrink:0; opacity:0.7; }
+    .sb-nav a:hover .sb-nav-icon, .sb-nav a.active .sb-nav-icon { opacity:1; }
+    .sb-footer { padding: 1rem 1.4rem; border-top: 1px solid rgba(201,168,76,0.15); }
+    .btn-view { display:block; text-align:center; background:rgba(201,168,76,0.12); color:var(--gold); text-decoration:none; font-size:0.81rem; font-weight:700; padding:9px; border-radius:10px; margin-bottom:0.5rem; transition:background 0.2s; letter-spacing:0.3px; }
+    .btn-view:hover { background:rgba(201,168,76,0.22); }
+    .btn-signout { display:block; text-align:center; background:none; color:rgba(255,255,255,0.35); font-size:0.74rem; border:none; cursor:pointer; width:100%; padding:6px; transition:color 0.2s; font-family:'Inter',sans-serif; }
+    .btn-signout:hover { color:rgba(255,255,255,0.65); }
+
+    /* MAIN */
+    .main-area { flex: 1; overflow-y: auto; }
+    .topbar {
+      background: var(--white); padding: 0 2rem; height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+    .topbar h1 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--red-dark); }
+    .topbar-badge {
+      background: var(--gold-lt); color: var(--gold-dark); font-size: 0.7rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; border: 1px solid rgba(168,134,42,0.3);
+    }
+    .content { padding: 2rem; }
+
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-box {
+      background: var(--white); border-radius: 14px; padding: 1.2rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      display: flex; align-items: center; gap: 0.9rem;
+      border-left: 3px solid;
+    }
+    .stat-box.s-wedding  { border-color: var(--red); }
+    .stat-box.s-birthday { border-color: #C07830; }
+    .stat-box.s-naming   { border-color: var(--gold); }
+    .stat-box.s-house    { border-color: var(--gold-dark); }
+    .stat-icon-wrap { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .s-wedding  .stat-icon-wrap { background:rgba(184,41,30,0.08); }
+    .s-birthday .stat-icon-wrap { background:rgba(192,120,48,0.1); }
+    .s-naming   .stat-icon-wrap { background:rgba(201,168,76,0.12); }
+    .s-house    .stat-icon-wrap { background:rgba(168,134,42,0.1); }
+    .stat-num  { font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 900; color: var(--text); line-height:1; }
+    .stat-lbl  { font-size: 0.72rem; color: var(--text-mid); margin-top:2px; }
+
+    /* SECTION PANELS */
+    .s-panel { display: none; }
+    .s-panel.active { display: block; }
+
+    /* GUIDE */
+    .guide-box {
+      background: var(--gold-lt); border: 1px solid rgba(168,134,42,0.25);
+      border-radius: 14px; padding: 1.4rem 1.5rem; margin-bottom: 2rem;
+    }
+    .guide-box h4 { color: var(--gold-dark); font-size: 0.88rem; font-weight: 700; margin-bottom: 0.8rem; display:flex; align-items:center; gap:8px; }
+    .steps-list { list-style: none; counter-reset: s; }
+    .steps-list li {
+      counter-increment: s; display: flex; gap: 10px; align-items: flex-start;
+      font-size: 0.82rem; color: var(--text-mid); padding: 5px 0; line-height: 1.5;
+    }
+    .steps-list li::before {
+      content: counter(s); background: var(--red); color: var(--white);
+      width: 20px; height: 20px; border-radius: 50%; font-size: 0.68rem; font-weight: 800;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    }
+    .steps-list code { background: rgba(184,41,30,0.07); color: var(--red); padding: 1px 6px; border-radius: 4px; font-family: monospace; }
+
+    /* UPLOAD CARD */
+    .upload-box {
+      background: var(--white); border-radius: 16px; padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 2rem;
+      border-top: 3px solid var(--gold);
+    }
+    .upload-box h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--red-dark); margin-bottom: 0.25rem; }
+    .upload-box .ub-sub { font-size: 0.81rem; color: var(--text-mid); margin-bottom: 1.5rem; }
+    .fg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+    .fg.full { grid-column: 1/-1; }
+    .fg label { font-size: 0.78rem; font-weight: 600; color: var(--text); letter-spacing: 0.2px; }
+    .fg input, .fg textarea, .fg select {
+      padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 9px;
+      font-size: 0.84rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
+      background: var(--bg); color: var(--text);
+    }
+    .fg input:focus, .fg textarea:focus { border-color: var(--red); background: var(--white); }
+    .fg textarea { height: 68px; resize: none; }
+
+    /* DROP ZONE */
+    .drop-zone {
+      border: 2px dashed rgba(184,41,30,0.25); border-radius: 10px;
+      padding: 1.8rem 1rem; text-align: center; cursor: pointer;
+      background: var(--bg-alt); position: relative; transition: all 0.2s;
+    }
+    .drop-zone:hover, .drop-zone.over { border-color: var(--red); background: rgba(184,41,30,0.03); }
+    .drop-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .dz-icon { margin-bottom: 0.5rem; display:flex; justify-content:center; }
+    .dz-main { font-size: 0.84rem; font-weight: 700; color: var(--red-dark); }
+    .dz-hint { font-size: 0.72rem; color: var(--text-mid); margin-top: 3px; }
+
+    .preview-wrap { display:none; border-radius:10px; overflow:hidden; height:175px; border:1.5px solid var(--border); position:relative; }
+    .preview-wrap img { width:100%; height:100%; object-fit:cover; }
+    .rm-img { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.55); color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
+
+    .btn-add {
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: var(--white); font-size: 0.92rem; font-weight: 700;
+      padding: 11px 26px; border-radius: 50px; border: none; cursor: pointer;
+      margin-top: 1.2rem; display: inline-flex; align-items: center; gap: 8px;
+      transition: opacity 0.2s; font-family: 'Inter', sans-serif; letter-spacing: 0.2px;
+    }
+    .btn-add:hover { opacity: 0.88; }
+
+    /* PRODUCTS LIST */
+    .list-box {
+      background: var(--white); border-radius: 16px; padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .lb-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; gap:0.8rem; flex-wrap:wrap; }
+    .lb-head h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--red-dark); }
+    .lb-count { background:var(--gold-lt); color:var(--gold-dark); font-size:0.68rem; font-weight:700; padding:3px 10px; border-radius:10px; border:1px solid rgba(168,134,42,0.3); }
+
+    .p-row { display:flex; align-items:center; gap:1rem; padding:0.85rem 0; border-bottom:1px solid var(--bg-alt); }
+    .p-row:last-child { border-bottom:none; }
+    .p-img { width:58px; height:58px; border-radius:9px; flex-shrink:0; overflow:hidden; background:linear-gradient(135deg,var(--red-deep),var(--red-dark)); display:flex; align-items:center; justify-content:center; }
+    .p-img img { width:100%; height:100%; object-fit:cover; }
+    .p-img svg { opacity:0.6; }
+    .p-info { flex:1; min-width:0; }
+    .p-name { font-size:0.87rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .p-meta { font-size:0.72rem; color:var(--text-mid); margin-top:2px; }
+    .p-price { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--red); flex-shrink:0; }
+    .btn-del { background:rgba(184,41,30,0.07); color:var(--danger); border:none; width:34px; height:34px; border-radius:8px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
+    .btn-del:hover { background:rgba(184,41,30,0.15); }
+
+    .no-prods { text-align:center; padding:2.5rem 1rem; }
+    .no-prods .np-icon { margin-bottom:0.6rem; display:flex; justify-content:center; opacity:0.35; }
+    .no-prods p { font-size:0.82rem; color:var(--text-mid); }
+
+    /* SETTINGS */
+    .settings-box { background:var(--white); border-radius:16px; padding:2rem; box-shadow:0 2px 12px rgba(0,0,0,0.05); max-width:420px; margin-bottom:1.5rem; }
+    .settings-box h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--red-dark); margin-bottom:0.25rem; }
+    .settings-box .s-sub { font-size:0.81rem; color:var(--text-mid); margin-bottom:1.4rem; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--red-dark); color:#fff; padding:11px 24px; border-radius:50px; font-size:0.83rem; font-weight:600; z-index:9999; box-shadow:0 4px 20px rgba(0,0,0,0.3); opacity:0; pointer-events:none; transition:opacity 0.3s; display:flex; align-items:center; gap:8px; white-space:nowrap; }
+    .toast.show { opacity:1; }
+    .toast.ok   { background:var(--success); }
+
+    /* Leads section */
+    .leads-box { background:var(--white); border-radius:16px; padding:2rem; box-shadow:0 2px 12px rgba(0,0,0,0.05); }
+    .lead-row { display:flex; gap:1rem; align-items:center; padding:0.85rem 0; border-bottom:1px solid var(--bg-alt); font-size:0.84rem; }
+    .lead-row:last-child { border-bottom:none; }
+    .lead-avatar { width:36px; height:36px; border-radius:50%; background:var(--gold-lt); border:1.5px solid rgba(168,134,42,0.3); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .lead-name  { font-weight:600; color:var(--text); flex:1; }
+    .lead-phone { font-size:0.82rem; color:var(--text-mid); flex-shrink:0; }
+    .lead-time  { font-size:0.7rem; color:#bbb; flex-shrink:0; }
+
+    @media (max-width:900px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width:640px) {
+      .sidebar { display:none; }
+      .fg-grid { grid-template-columns:1fr; }
+      .stats-row { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg width="34" height="38" viewBox="0 0 30 34" fill="none">
+        <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
+        <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.6"/>
+      </svg>
+      <div class="login-logo-text">
+        <div class="login-logo-title"><span class="lm">Moti</span><span class="lb"> Bags</span></div>
+        <div class="login-logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <h2>Welcome Back</h2>
+    <p>Enter your password to manage products</p>
+    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btn-login" onclick="doLogin()">Login to Admin Panel</button>
+    <p class="login-err" id="loginErr">Incorrect password. Please try again.</p>
+    <p class="login-hint">Default password: <strong>motibags123</strong><br/>Change it in Settings after logging in.</p>
+  </div>
+</div>
+
+<!-- ── ADMIN WRAP ── -->
+<div class="admin-wrap" id="adminWrap">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">
+      <svg width="28" height="32" viewBox="0 0 30 34" fill="none">
+        <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
+        <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.6"/>
+      </svg>
+      <div>
+        <div class="sb-logo-name"><span class="lm">Moti</span><span class="lb"> Bags</span></div>
+        <div class="sb-logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <a href="#" class="active" id="sn-wedding"  onclick="showPanel('wedding'); return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="10" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="10" r="5" stroke="currentColor" stroke-width="1.5"/></svg>
+        Wedding Bags <span class="cnt" id="sc-wedding">0</span>
+      </a>
+      <a href="#" id="sn-birthday" onclick="showPanel('birthday');return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="10" width="14" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 10 L10 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="10" y1="6" x2="10" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
+        Birthday Bags <span class="cnt" id="sc-birthday">0</span>
+      </a>
+      <a href="#" id="sn-naming" onclick="showPanel('naming');return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="13" rx="6" ry="4" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+        Naming Ceremony <span class="cnt" id="sc-naming">0</span>
+      </a>
+      <a href="#" id="sn-house" onclick="showPanel('house');return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 10 L10 4 L17 10 V17 H3 V10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><rect x="8" y="13" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1.2"/></svg>
+        House Warming <span class="cnt" id="sc-house">0</span>
+      </a>
+      <a href="#" id="sn-leads" onclick="showPanel('leads');return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="13" x2="11" y2="13" stroke="currentColor" stroke-width="1.2"/></svg>
+        Customer Leads
+      </a>
+      <a href="#" id="sn-settings" onclick="showPanel('settings');return false">
+        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sb-footer">
+      <a href="index.html" target="_blank" class="btn-view">View Live Site</a>
+      <button class="btn-signout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-area">
+    <div class="topbar">
+      <h1 id="topbar-title">Wedding Bags</h1>
+      <span class="topbar-badge">Admin</span>
+    </div>
+    <div class="content">
+
+      <!-- STATS ROW -->
+      <div class="stats-row">
+        <div class="stat-box s-wedding">
+          <div class="stat-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="10" r="5" stroke="#B8291E" stroke-width="1.5"/><circle cx="13" cy="10" r="5" stroke="#B8291E" stroke-width="1.5"/></svg>
+          </div>
+          <div><div class="stat-num" id="sn-w">0</div><div class="stat-lbl">Wedding</div></div>
+        </div>
+        <div class="stat-box s-birthday">
+          <div class="stat-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="10" width="14" height="8" rx="1.5" stroke="#C07830" stroke-width="1.5"/><path d="M3 10 L10 6 L17 10" stroke="#C07830" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="stat-num" id="sn-b">0</div><div class="stat-lbl">Birthday</div></div>
+        </div>
+        <div class="stat-box s-naming">
+          <div class="stat-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="13" rx="5" ry="3.5" stroke="#C9A84C" stroke-width="1.5"/><circle cx="10" cy="7" r="2.5" stroke="#C9A84C" stroke-width="1.5"/></svg>
+          </div>
+          <div><div class="stat-num" id="sn-n">0</div><div class="stat-lbl">Naming</div></div>
+        </div>
+        <div class="stat-box s-house">
+          <div class="stat-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10 L10 4 L17 10 V17 H3 V10Z" stroke="#A8862A" stroke-width="1.5" stroke-linejoin="round"/><rect x="8" y="13" width="4" height="4" rx="0.5" stroke="#A8862A" stroke-width="1.2"/></svg>
+          </div>
+          <div><div class="stat-num" id="sn-h">0</div><div class="stat-lbl">House Warming</div></div>
+        </div>
+      </div>
+
+      <!-- WEDDING PANEL -->
+      <div class="s-panel active" id="p-wedding">
+        <div class="guide-box">
+          <h4>
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#A8862A" stroke-width="1.8"/><line x1="6" y1="7" x2="14" y2="7" stroke="#A8862A" stroke-width="1.4"/><line x1="6" y1="10" x2="14" y2="10" stroke="#A8862A" stroke-width="1.4"/><line x1="6" y1="13" x2="10" y2="13" stroke="#A8862A" stroke-width="1.4"/></svg>
+            How to upload your bag photos
+          </h4>
+          <ol class="steps-list">
+            <li>Create a folder called <code>images</code> inside your <code>moti-bags</code> folder on your computer</li>
+            <li>Inside <code>images</code>, create 4 sub-folders: <code>wedding</code>, <code>birthday</code>, <code>naming</code>, <code>house</code></li>
+            <li>Copy your bag photos into the correct folder (e.g. <code>images/wedding/bag1.jpg</code>)</li>
+            <li>In the form below — click <strong>Choose Photo</strong>, select the image, fill in the details</li>
+            <li>Click <strong>Add Bag</strong> — it instantly appears on the website for customers to see!</li>
+          </ol>
+        </div>
+        <div class="upload-box">
+          <h3>Add New Wedding Bag</h3>
+          <p class="ub-sub">Upload a photo and fill in the bag details to show it on the website.</p>
+          <div class="fg-grid">
+            <div class="fg"><label>Bag Name *</label><input id="w-name" type="text" placeholder="e.g. Royal Silk Bag"/></div>
+            <div class="fg"><label>Price *</label><input id="w-price" type="text" placeholder="e.g. ₹45"/></div>
+            <div class="fg full"><label>Description</label><textarea id="w-desc" placeholder="e.g. Premium silk bag with gold foil print, available in all sizes"></textarea></div>
+            <div class="fg"><label>Badge Label (optional)</label><input id="w-badge" type="text" placeholder="e.g. Bestseller, New"/></div>
+            <div class="fg">
+              <label>Photo</label>
+              <div class="drop-zone" id="w-dz">
+                <input type="file" accept="image/*" onchange="previewImg(this,'w')"/>
+                <div class="dz-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="dz-main">Click or drag photo here</div>
+                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
+              </div>
+              <div class="preview-wrap" id="w-prev">
+                <img id="w-prev-img" src="" alt=""/>
+                <button class="rm-img" onclick="removeImg('w')">×</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-add" onclick="addProduct('wedding')">+ Add Wedding Bag</button>
+        </div>
+        <div class="list-box">
+          <div class="lb-head"><h3>Wedding Bag Products</h3><span class="lb-count" id="wc-lbl">0 products</span></div>
+          <div id="list-wedding"></div>
+        </div>
+      </div>
+
+      <!-- BIRTHDAY PANEL -->
+      <div class="s-panel" id="p-birthday">
+        <div class="upload-box">
+          <h3>Add New Birthday Bag</h3>
+          <p class="ub-sub">Upload a birthday bag photo to display on the website.</p>
+          <div class="fg-grid">
+            <div class="fg"><label>Bag Name *</label><input id="b-name" type="text" placeholder="e.g. Unicorn Party Bag"/></div>
+            <div class="fg"><label>Price *</label><input id="b-price" type="text" placeholder="e.g. ₹18"/></div>
+            <div class="fg full"><label>Description</label><textarea id="b-desc" placeholder="e.g. Fun unicorn theme bag for kids' birthday parties"></textarea></div>
+            <div class="fg"><label>Badge Label</label><input id="b-badge" type="text" placeholder="e.g. Kids Fav, Popular"/></div>
+            <div class="fg">
+              <label>Photo</label>
+              <div class="drop-zone" id="b-dz">
+                <input type="file" accept="image/*" onchange="previewImg(this,'b')"/>
+                <div class="dz-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="dz-main">Click or drag photo here</div>
+                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
+              </div>
+              <div class="preview-wrap" id="b-prev">
+                <img id="b-prev-img" src="" alt=""/>
+                <button class="rm-img" onclick="removeImg('b')">×</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-add" onclick="addProduct('birthday')">+ Add Birthday Bag</button>
+        </div>
+        <div class="list-box"><div class="lb-head"><h3>Birthday Bag Products</h3><span class="lb-count" id="bc-lbl">0 products</span></div><div id="list-birthday"></div></div>
+      </div>
+
+      <!-- NAMING PANEL -->
+      <div class="s-panel" id="p-naming">
+        <div class="upload-box">
+          <h3>Add New Naming Ceremony Bag</h3>
+          <p class="ub-sub">Upload naming ceremony bag photos to display on the website.</p>
+          <div class="fg-grid">
+            <div class="fg"><label>Bag Name *</label><input id="n-name" type="text" placeholder="e.g. Pastel Baby Bag"/></div>
+            <div class="fg"><label>Price *</label><input id="n-price" type="text" placeholder="e.g. ₹20"/></div>
+            <div class="fg full"><label>Description</label><textarea id="n-desc" placeholder="e.g. Soft pink cotton bag with baby footprint print"></textarea></div>
+            <div class="fg"><label>Badge Label</label><input id="n-badge" type="text" placeholder="e.g. New, Trending"/></div>
+            <div class="fg">
+              <label>Photo</label>
+              <div class="drop-zone" id="n-dz">
+                <input type="file" accept="image/*" onchange="previewImg(this,'n')"/>
+                <div class="dz-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="dz-main">Click or drag photo here</div>
+                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
+              </div>
+              <div class="preview-wrap" id="n-prev">
+                <img id="n-prev-img" src="" alt=""/>
+                <button class="rm-img" onclick="removeImg('n')">×</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-add" onclick="addProduct('naming')">+ Add Naming Bag</button>
+        </div>
+        <div class="list-box"><div class="lb-head"><h3>Naming Ceremony Products</h3><span class="lb-count" id="nc-lbl">0 products</span></div><div id="list-naming"></div></div>
+      </div>
+
+      <!-- HOUSE WARMING PANEL -->
+      <div class="s-panel" id="p-house">
+        <div class="upload-box">
+          <h3>Add New House Warming Bag</h3>
+          <p class="ub-sub">Upload house warming bag photos to show on the website.</p>
+          <div class="fg-grid">
+            <div class="fg"><label>Bag Name *</label><input id="h-name" type="text" placeholder="e.g. House Warming Gift Bag"/></div>
+            <div class="fg"><label>Price *</label><input id="h-price" type="text" placeholder="e.g. ₹30"/></div>
+            <div class="fg full"><label>Description</label><textarea id="h-desc" placeholder="e.g. Traditional red jute bag with diya print for house warming guests"></textarea></div>
+            <div class="fg"><label>Badge Label</label><input id="h-badge" type="text" placeholder="e.g. Traditional, New"/></div>
+            <div class="fg">
+              <label>Photo</label>
+              <div class="drop-zone" id="h-dz">
+                <input type="file" accept="image/*" onchange="previewImg(this,'h')"/>
+                <div class="dz-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="dz-main">Click or drag photo here</div>
+                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
+              </div>
+              <div class="preview-wrap" id="h-prev">
+                <img id="h-prev-img" src="" alt=""/>
+                <button class="rm-img" onclick="removeImg('h')">×</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-add" onclick="addProduct('house')">+ Add House Warming Bag</button>
+        </div>
+        <div class="list-box"><div class="lb-head"><h3>House Warming Products</h3><span class="lb-count" id="hc-lbl">0 products</span></div><div id="list-house"></div></div>
+      </div>
+
+      <!-- LEADS PANEL -->
+      <div class="s-panel" id="p-leads">
+        <div class="leads-box">
+          <div class="lb-head">
+            <h3>Customer Leads</h3>
+            <button onclick="clearLeads()" style="background:rgba(184,41,30,0.07);color:var(--danger);border:1.5px solid rgba(184,41,30,0.2);font-size:0.78rem;padding:5px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Inter',sans-serif;">Clear All</button>
+          </div>
+          <p style="font-size:0.81rem;color:var(--text-mid);margin-bottom:1rem;">Customers who entered their name and phone number before clicking WhatsApp on your website.</p>
+          <div id="leads-list"></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PANEL -->
+      <div class="s-panel" id="p-settings">
+        <div class="settings-box">
+          <h3>Change Admin Password</h3>
+          <p class="s-sub">Update your admin panel login password.</p>
+          <div class="fg" style="margin-bottom:0.8rem"><label>Current Password</label><input type="password" id="pw-cur" placeholder="Current password"/></div>
+          <div class="fg" style="margin-bottom:0.8rem"><label>New Password</label><input type="password" id="pw-new" placeholder="Min 6 characters"/></div>
+          <div class="fg" style="margin-bottom:1.2rem"><label>Confirm New Password</label><input type="password" id="pw-cf" placeholder="Re-enter new password"/></div>
+          <button class="btn-add" style="margin-top:0" onclick="changePw()">Update Password</button>
+        </div>
+        <!-- CLOUDINARY SETTINGS -->
+        <div class="settings-box" style="border-top:3px solid var(--gold)">
+          <h3>Image Hosting — Cloudinary</h3>
+          <p class="s-sub">Connect Cloudinary so product photos work for all visitors on all devices at full quality. Free at <strong>cloudinary.com</strong></p>
+          <div style="background:var(--bg-alt);border-radius:8px;padding:1rem;margin-bottom:1.2rem;font-size:0.8rem;line-height:1.7;color:var(--text-mid)">
+            <strong style="color:var(--text);display:block;margin-bottom:0.3rem">Setup steps (2 minutes):</strong>
+            1. Go to <strong>cloudinary.com</strong> → Sign Up Free<br/>
+            2. After login, note your <strong>Cloud Name</strong> (shown on dashboard)<br/>
+            3. Go to <strong>Settings → Upload → Add upload preset</strong><br/>
+            4. Set Signing Mode to <strong>Unsigned</strong> → Save → Copy the preset name<br/>
+            5. Paste both below and click Save
+          </div>
+          <div class="fg" style="margin-bottom:0.8rem">
+            <label>Cloud Name</label>
+            <input type="text" id="cl-name" placeholder="e.g. my-cloud-name"/>
+          </div>
+          <div class="fg" style="margin-bottom:1.2rem">
+            <label>Upload Preset (Unsigned)</label>
+            <input type="text" id="cl-preset" placeholder="e.g. motibags_upload"/>
+          </div>
+          <button class="btn-add" style="margin-top:0" onclick="saveCloudinary()">Save &amp; Connect</button>
+          <div id="cl-status" style="margin-top:0.9rem;font-size:0.8rem;display:none"></div>
+        </div>
+
+        <div class="settings-box" style="border-left:3px solid var(--danger)">
+          <h3>Clear All Products</h3>
+          <p class="s-sub">Permanently delete all products from all categories. This cannot be undone.</p>
+          <button onclick="clearAll()" style="background:rgba(184,41,30,0.07);color:var(--danger);font-size:0.88rem;font-weight:700;padding:10px 24px;border-radius:50px;border:1.5px solid rgba(184,41,30,0.25);cursor:pointer;font-family:'Inter',sans-serif;">Clear All Products</button>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-area -->
+</div><!-- /admin-wrap -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const PW_KEY   = 'motibags_pw';
+  const DATA_KEY = 'motibags_products';
+  const LEADS_KEY= 'motibags_leads';
+  const LABELS= { wedding:'Wedding', birthday:'Birthday', naming:'Naming Ceremony', house:'House Warming' };
+  const CATS  = ['wedding','birthday','naming','house'];
+  const PFX   = { wedding:'w', birthday:'b', naming:'n', house:'h' };
+  let imgMap  = {};
+
+  /* ── AUTH ── */
+  function getpw() { return localStorage.getItem(PW_KEY) || 'motibags123'; }
+  function doLogin() {
+    if (document.getElementById('pwInput').value === getpw()) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminWrap').classList.add('visible');
+      refreshAll();
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+    }
+  }
+  function logout() {
+    document.getElementById('adminWrap').classList.remove('visible');
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('loginErr').style.display = 'none';
+  }
+  function changePw() {
+    const cur = document.getElementById('pw-cur').value;
+    const nw  = document.getElementById('pw-new').value;
+    const cf  = document.getElementById('pw-cf').value;
+    if (cur !== getpw())  { toast('Current password is incorrect', false); return; }
+    if (nw.length < 6)   { toast('New password must be at least 6 characters', false); return; }
+    if (nw !== cf)        { toast('Passwords do not match', false); return; }
+    localStorage.setItem(PW_KEY, nw);
+    ['pw-cur','pw-new','pw-cf'].forEach(id => document.getElementById(id).value = '');
+    toast('Password updated successfully', true);
+  }
+
+  /* ── DATA ── */
+  function getData() {
+    try { const d = JSON.parse(localStorage.getItem(DATA_KEY)||'{}'); CATS.forEach(c=>{ if(!d[c]) d[c]=[]; }); return d; }
+    catch(e) { return { wedding:[], birthday:[], naming:[], house:[] }; }
+  }
+  function saveData(d) { localStorage.setItem(DATA_KEY, JSON.stringify(d)); }
+  function clearAll() {
+    if (!confirm('Delete ALL products from all categories?')) return;
+    saveData({ wedding:[], birthday:[], naming:[], house:[] });
+    refreshAll(); toast('All products cleared');
+  }
+
+  /* ── CLOUDINARY ── */
+  function getCloud() {
+    return { name: localStorage.getItem('mb_cloud_name')||'', preset: localStorage.getItem('mb_cloud_preset')||'' };
+  }
+  function saveCloudinary() {
+    const name   = document.getElementById('cl-name').value.trim();
+    const preset = document.getElementById('cl-preset').value.trim();
+    if (!name || !preset) { toast('Enter both Cloud Name and Upload Preset', false); return; }
+    localStorage.setItem('mb_cloud_name',   name);
+    localStorage.setItem('mb_cloud_preset', preset);
+    showCloudStatus();
+    toast('Cloudinary connected — images will now upload to cloud', true);
+  }
+  function showCloudStatus() {
+    const { name } = getCloud();
+    const el = document.getElementById('cl-status');
+    if (!el) return;
+    if (name) {
+      el.style.display = 'block';
+      el.innerHTML = `<span style="color:var(--success);font-weight:600">Connected</span> — Cloud: <strong>${esc(name)}</strong>. Photos upload to Cloudinary at full quality.`;
+    } else {
+      el.style.display = 'block';
+      el.innerHTML = `<span style="color:var(--text-mid)">Not configured — photos are stored locally (won't show on live site for other visitors).</span>`;
+    }
+  }
+
+  /* ── IMAGE ── */
+  async function previewImg(input, pfx) {
+    const f = input.files[0];
+    if (!f) return;
+    const dz   = document.getElementById(pfx+'-dz');
+    const pw   = document.getElementById(pfx+'-prev');
+    const main = dz.querySelector('.dz-main');
+    const hint = dz.querySelector('.dz-hint');
+    const { name, preset } = getCloud();
+
+    if (name && preset) {
+      /* ── Upload to Cloudinary ── */
+      if (f.size > 20*1024*1024) { toast('Image must be under 20MB', false); return; }
+      const origMain = main.textContent;
+      const origHint = hint.textContent;
+      main.textContent = 'Uploading to cloud…';
+      hint.textContent = 'Please wait';
+      dz.style.opacity = '0.6';
+      dz.style.pointerEvents = 'none';
+      try {
+        const fd = new FormData();
+        fd.append('file', f);
+        fd.append('upload_preset', preset);
+        const res  = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(name)}/image/upload`, { method:'POST', body:fd });
+        const data = await res.json();
+        if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
+        imgMap[pfx] = data.secure_url;
+        dz.style.display = 'none';
+        pw.style.display = 'block';
+        document.getElementById(pfx+'-prev-img').src = data.secure_url;
+        toast('Image uploaded to cloud', true);
+      } catch(err) {
+        main.textContent = origMain;
+        hint.textContent = origHint;
+        dz.style.opacity = '1';
+        dz.style.pointerEvents = '';
+        toast('Upload failed: ' + err.message, false);
+      }
+    } else {
+      /* ── Base64 fallback (local only) ── */
+      if (f.size > 5*1024*1024) { toast('Image must be under 5MB. Set up Cloudinary in Settings for larger files.', false); return; }
+      const r = new FileReader();
+      r.onload = function(e) {
+        imgMap[pfx] = e.target.result;
+        dz.style.display = 'none';
+        pw.style.display = 'block';
+        document.getElementById(pfx+'-prev-img').src = e.target.result;
+      };
+      r.readAsDataURL(f);
+    }
+  }
+  function removeImg(pfx) {
+    imgMap[pfx] = null;
+    const dz = document.getElementById(pfx+'-dz');
+    dz.style.display = 'block';
+    dz.style.opacity = '1';
+    dz.style.pointerEvents = '';
+    document.getElementById(pfx+'-prev').style.display = 'none';
+    document.getElementById(pfx+'-prev-img').src = '';
+    dz.querySelector('input[type=file]').value = '';
+  }
+
+  /* ── ADD ── */
+  function addProduct(cat) {
+    const pfx   = PFX[cat];
+    const name  = document.getElementById(pfx+'-name').value.trim();
+    const price = document.getElementById(pfx+'-price').value.trim();
+    const desc  = document.getElementById(pfx+'-desc').value.trim();
+    const badge = document.getElementById(pfx+'-badge').value.trim();
+    const img   = imgMap[pfx] || '';
+    if (!name)  { toast('Please enter a bag name', false); return; }
+    if (!price) { toast('Please enter a price', false); return; }
+    const data = getData();
+    data[cat].push({ id: Date.now().toString(), name, price, desc, badge, img });
+    saveData(data);
+    document.getElementById(pfx+'-name').value  = '';
+    document.getElementById(pfx+'-price').value = '';
+    document.getElementById(pfx+'-desc').value  = '';
+    document.getElementById(pfx+'-badge').value = '';
+    removeImg(pfx);
+    refreshAll();
+    toast('"' + name + '" added to ' + LABELS[cat] + ' bags', true);
+  }
+
+  /* ── DELETE ── */
+  function delProduct(cat, id) {
+    if (!confirm('Delete this product?')) return;
+    const data = getData();
+    data[cat] = data[cat].filter(p => p.id !== id);
+    saveData(data);
+    refreshAll();
+    toast('Product deleted');
+  }
+
+  /* ── RENDER LIST ── */
+  const BAG_SVG = `<svg width="26" height="26" viewBox="0 0 30 34" fill="none"><path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/><rect x="2" y="12" width="26" height="20" rx="3" stroke="#C9A84C" stroke-width="2"/></svg>`;
+  const DEL_SVG = `<svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M8 6V4h4v2M9 10v5M11 10v5M5 6l1 11h8l1-11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  function renderList(cat) {
+    const pfx   = PFX[cat];
+    const data  = getData();
+    const items = data[cat] || [];
+    const listEl = document.getElementById('list-' + cat);
+    const lblEl  = document.getElementById(pfx[0]+'c-lbl');
+    const cntEl  = document.getElementById('sc-' + cat);
+    const statEl = document.getElementById('sn-' + pfx[0]);
+
+    if (lblEl)  lblEl.textContent  = items.length + ' product' + (items.length!==1?'s':'');
+    if (cntEl)  cntEl.textContent  = items.length;
+    if (statEl) statEl.textContent = items.length;
+
+    if (!listEl) return;
+    if (items.length === 0) {
+      listEl.innerHTML = `<div class="no-prods"><div class="np-icon">${BAG_SVG}</div><p>No products yet. Add your first ${LABELS[cat]} bag above.</p></div>`;
+      return;
+    }
+    listEl.innerHTML = items.map(p => `
+      <div class="p-row">
+        <div class="p-img">${p.img ? `<img src="${esc(p.img)}" alt="">` : BAG_SVG}</div>
+        <div class="p-info">
+          <div class="p-name">${esc(p.name)}</div>
+          <div class="p-meta">${esc(p.desc ? p.desc.substring(0,60)+(p.desc.length>60?'…':'') : 'No description')}</div>
+        </div>
+        <div class="p-price">${esc(p.price)}</div>
+        <button class="btn-del" onclick="delProduct('${cat}','${p.id}')" title="Delete">${DEL_SVG}</button>
+      </div>`).join('');
+  }
+
+  /* ── LEADS ── */
+  function getLeads() {
+    try { return JSON.parse(localStorage.getItem(LEADS_KEY) || '[]'); } catch(e){ return []; }
+  }
+  const USER_SVG = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="#A8862A" stroke-width="1.5"/><path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#A8862A" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  function renderLeads() {
+    const leads = getLeads();
+    const el = document.getElementById('leads-list');
+    if (!el) return;
+    if (leads.length === 0) {
+      el.innerHTML = `<div class="no-prods"><div class="np-icon"><svg width="36" height="36" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#ccc" stroke-width="1.5"/><line x1="6" y1="7" x2="14" y2="7" stroke="#ccc" stroke-width="1.2"/><line x1="6" y1="10" x2="14" y2="10" stroke="#ccc" stroke-width="1.2"/><line x1="6" y1="13" x2="10" y2="13" stroke="#ccc" stroke-width="1.2"/></svg></div><p>No leads yet. They appear when customers enter their name on the website.</p></div>`;
+      return;
+    }
+    el.innerHTML = leads.slice().reverse().map(l => `
+      <div class="lead-row">
+        <div class="lead-avatar">${USER_SVG}</div>
+        <div class="lead-name">${esc(l.name)}</div>
+        ${l.phone ? `<div class="lead-phone">${esc(l.phone)}</div>` : ''}
+        <div class="lead-time">${l.time || ''}</div>
+      </div>`).join('');
+  }
+  function clearLeads() {
+    if (!confirm('Clear all customer leads?')) return;
+    localStorage.removeItem(LEADS_KEY);
+    renderLeads();
+    toast('Leads cleared');
+  }
+
+  function refreshAll() {
+    CATS.forEach(renderList);
+    renderLeads();
+    const data = getData();
+    document.getElementById('sn-w').textContent = (data.wedding||[]).length;
+    document.getElementById('sn-b').textContent = (data.birthday||[]).length;
+    document.getElementById('sn-n').textContent = (data.naming||[]).length;
+    document.getElementById('sn-h').textContent = (data.house||[]).length;
+  }
+
+  /* ── PANEL SWITCH ── */
+  function showPanel(name) {
+    const allPanels = ['wedding','birthday','naming','house','leads','settings'];
+    allPanels.forEach(p => {
+      const el = document.getElementById('p-' + p);
+      const sn = document.getElementById('sn-' + p);
+      if (el) el.classList.toggle('active', p === name);
+      if (sn) sn.classList.toggle('active', p === name);
+    });
+    const titles = { wedding:'Wedding Bags', birthday:'Birthday Bags', naming:'Naming Ceremony', house:'House Warming', leads:'Customer Leads', settings:'Settings' };
+    document.getElementById('topbar-title').textContent = titles[name] || name;
+  }
+
+  /* ── DRAG DROP ── */
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('over');
+      const f = e.dataTransfer.files[0];
+      if (!f || !f.type.startsWith('image/')) return;
+      const pfx = zone.id.split('-')[0];
+      const dt = new DataTransfer(); dt.items.add(f);
+      const fi = zone.querySelector('input[type=file]');
+      fi.files = dt.files;
+      previewImg(fi, pfx);
+    });
+  });
+
+  /* ── TOAST ── */
+  function toast(msg, ok = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (ok ? ' ok' : '');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── SYNC LEADS FROM INDEX ── */
+  window.addEventListener('storage', function(e) {
+    if (e.key === LEADS_KEY) renderLeads();
+  });
+
+  /* ── INIT CLOUDINARY SETTINGS FIELDS ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    const { name, preset } = getCloud();
+    if (name)   document.getElementById('cl-name').value   = name;
+    if (preset) document.getElementById('cl-preset').value = preset;
+    showCloudStatus();
+  });
+</script>
+</body>
+</html>
