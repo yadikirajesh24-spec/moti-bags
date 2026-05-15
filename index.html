@@ -3,225 +3,581 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moti Bags — Gift Bag Collections</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <title>Moti Bags — Premium Collections</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --red: #B8291E; --red-dark: #8B1A12; --red-deep: #3D0D08;
-      --gold: #C9A84C; --gold-dark: #A8862A; --gold-lt: #F8F0DC;
-      --bg: #FAFAF8; --bg-alt: #F4F1EC; --border: #E8E0D0;
-      --text: #1A1008; --text-mid: #6B5B45; --text-lt: #999;
+      --red:       #B8291E;
+      --red-dark:  #8B1A12;
+      --red-deep:  #3D0D08;
+      --gold:      #C9A84C;
+      --gold-dark: #A8862A;
+      --gold-lt:   #E8D5A3;
+      --gold-pale: #FAF4E8;
+      --white:     #FFFFFF;
+      --bg:        #FAFAF8;
+      --bg-alt:    #F4F1EC;
+      --text:      #1A1A1A;
+      --text-mid:  #555555;
+      --text-lt:   #888888;
+      --border:    #E5DDD5;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+      --shadow:    0 4px 24px rgba(0,0,0,0.09);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.13);
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* HEADER */
-    .site-header {
-      background: linear-gradient(135deg, var(--red-deep), #5C1810, var(--red-dark));
-      padding: 1.8rem 1.5rem 2rem; text-align: center;
-      border-bottom: 2px solid var(--gold);
-    }
-    .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 0.6rem; }
-    .logo-text { font-family: 'Inter', sans-serif; font-size: 1.7rem; font-weight: 800; }
-    .logo-text .lm { color: var(--red); -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
-    .logo-text .lb { color: var(--gold); }
-    .header-tagline { font-size: 0.75rem; color: rgba(255,255,255,0.45); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 0.7rem; }
-    .header-title { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem,4vw,2rem); color: white; font-weight: 700; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
 
-    /* BODY */
-    .page-body { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.2rem 5rem; }
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 64px; box-shadow: var(--shadow-sm);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-bag-icon { flex-shrink: 0; }
+    .logo-text { font-family: 'Inter', sans-serif; font-size: 1.5rem; letter-spacing: 0.5px; line-height: 1; }
+    .logo-moti { color: var(--red); font-weight: 800; }
+    .logo-bags { color: var(--gold-dark); font-weight: 700; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a { color: var(--text-mid); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta-btn {
+      background: var(--red); color: var(--white) !important;
+      padding: 8px 22px; border-radius: 6px; font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta-btn:hover { background: var(--red-dark) !important; color: var(--white) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; display: block; }
+    #mobileMenu {
+      display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 299;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0.5rem 2rem 1rem; box-shadow: var(--shadow);
+    }
+    #mobileMenu a { display: block; color: var(--text-mid); text-decoration: none; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+    #mobileMenu a:last-child { border-bottom: none; color: var(--red); font-weight: 600; }
 
-    /* GRID */
-    .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+    /* ══ HERO ══ */
+    .hero {
+      margin-top: 64px; min-height: 88vh;
+      background: linear-gradient(135deg, var(--red-deep) 0%, #5C1810 45%, var(--red-dark) 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 5rem 2rem; position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: var(--gold);
+    }
+    .hero-inner { max-width: 760px; text-align: center; position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block;
+      border: 1px solid rgba(201,168,76,0.5); color: var(--gold-lt);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+      padding: 6px 20px; border-radius: 2px; margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 6vw, 5rem); font-weight: 900;
+      color: var(--white); line-height: 1.1; margin-bottom: 1.4rem;
+    }
+    .hero h1 .h-gold { color: var(--gold); }
+    .hero p {
+      font-size: clamp(1rem, 1.8vw, 1.1rem); color: rgba(255,255,255,0.72);
+      max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.8;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-gold {
+      background: var(--gold); color: var(--red-deep); font-weight: 700; font-size: 0.95rem;
+      padding: 13px 32px; border-radius: 4px; border: none; cursor: pointer;
+      text-decoration: none; transition: background 0.2s, transform 0.2s; letter-spacing: 0.3px;
+    }
+    .btn-gold:hover { background: var(--gold-dark); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: rgba(255,255,255,0.85); font-weight: 500; font-size: 0.95rem;
+      padding: 12px 30px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.35);
+      cursor: pointer; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-stats {
+      display: flex; gap: 0; margin-top: 4rem; flex-wrap: wrap; justify-content: center;
+      border-top: 1px solid rgba(255,255,255,0.12); padding-top: 2.5rem;
+    }
+    .hero-stat { flex: 1; min-width: 120px; padding: 0 2rem; text-align: center; border-right: 1px solid rgba(255,255,255,0.12); }
+    .hero-stat:last-child { border-right: none; }
+    .stat-n { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--gold); }
+    .stat-l { font-size: 0.73rem; color: rgba(255,255,255,0.55); margin-top: 2px; letter-spacing: 0.5px; }
 
-    /* CARD */
-    .bag-card {
-      background: white; border-radius: 14px; overflow: hidden;
-      border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      transition: transform 0.2s, box-shadow 0.2s;
+    /* ══ SECTION COMMONS ══ */
+    .section { padding: 5.5rem 2rem; max-width: 1180px; margin: 0 auto; }
+    .section-hd { text-align: center; margin-bottom: 3.5rem; }
+    .section-eyebrow {
+      display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.8rem;
     }
-    .bag-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.11); }
-    .card-img {
-      width: 100%; aspect-ratio: 1; background: var(--bg-alt);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    .section-hd h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; color: var(--text); line-height: 1.2;
     }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .card-body { padding: 1rem; }
-    .card-name { font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 4px; }
-    .card-price { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--red); margin-bottom: 0.85rem; }
-    .btn-enquire {
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      width: 100%; background: #25D366; color: white; font-size: 0.82rem; font-weight: 700;
-      padding: 10px; border-radius: 8px; border: none; cursor: pointer;
-      font-family: 'Inter', sans-serif; transition: background 0.2s;
-    }
-    .btn-enquire:hover { background: #1da851; }
+    .section-hd h2 em { font-style: italic; color: var(--red); }
+    .section-hd p { color: var(--text-mid); font-size: 0.95rem; max-width: 460px; margin: 0.8rem auto 0; line-height: 1.75; }
 
-    /* EMPTY */
-    .empty-state { text-align: center; padding: 5rem 2rem; }
-    .empty-state h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text); }
-    .empty-state p { color: var(--text-mid); font-size: 0.9rem; }
-    .empty-icon { opacity: 0.18; margin: 0 auto 1rem; display: block; }
+    /* ══ COLLECTION CARD ══ */
+    .occasions-wrap { background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .collection-center { display: flex; justify-content: center; }
+    .collection-card {
+      background: var(--white); border-radius: 12px; padding: 3rem 3.5rem; text-align: center;
+      border: 1px solid var(--border); transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      cursor: pointer; max-width: 480px; width: 100%;
+    }
+    .collection-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--gold); }
+    .collection-card:hover .coll-icon path,
+    .collection-card:hover .coll-icon rect,
+    .collection-card:hover .coll-icon line { stroke: var(--red); }
+    .coll-icon { width: 80px; height: 80px; margin: 0 auto 1.6rem; display: block; }
+    .collection-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 0.8rem; }
+    .collection-card p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 1.6rem; }
+    .coll-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold); color: var(--red-deep); font-weight: 700; font-size: 0.9rem;
+      padding: 12px 28px; border-radius: 4px; letter-spacing: 0.3px;
+      transition: background 0.2s;
+    }
+    .collection-card:hover .coll-link { background: var(--gold-dark); }
 
-    /* MODAL */
-    .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200;
-      display: flex; align-items: center; justify-content: center; padding: 1rem;
-      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    /* ══ WHY US ══ */
+    .why-wrap { background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+    .why-card {
+      background: var(--white); border-radius: 8px; padding: 1.8rem 1.5rem;
+      border: 1px solid var(--border); transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .modal-bg.open { opacity: 1; pointer-events: all; }
-    .modal-box {
-      background: white; border-radius: 20px; padding: 2rem 1.8rem;
-      width: 100%; max-width: 360px; border-top: 4px solid var(--gold);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.25);
-    }
-    .modal-box h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--red-dark); margin-bottom: 0.25rem; }
-    .modal-box .m-sub { font-size: 0.82rem; color: var(--text-mid); margin-bottom: 1.4rem; line-height: 1.5; }
-    .m-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 0.85rem; }
-    .m-field label { font-size: 0.78rem; font-weight: 600; color: var(--text); }
-    .m-field input {
-      padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 9px;
-      font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none;
-      transition: border-color 0.2s; background: var(--bg);
-    }
-    .m-field input:focus { border-color: var(--red); background: white; }
-    .btn-wa-submit {
-      width: 100%; background: #25D366; color: white; font-size: 0.95rem; font-weight: 700;
-      padding: 13px; border-radius: 50px; border: none; cursor: pointer;
-      font-family: 'Inter', sans-serif; display: flex; align-items: center;
-      justify-content: center; gap: 8px; margin-top: 0.4rem;
-    }
-    .btn-wa-submit:hover { background: #1da851; }
-    .m-cancel { display: block; text-align: center; margin-top: 0.9rem; font-size: 0.8rem; color: var(--text-lt); cursor: pointer; }
-    .m-cancel:hover { color: var(--text); }
+    .why-card:hover { border-color: var(--gold); box-shadow: var(--shadow-sm); }
+    .why-icon { width: 36px; height: 36px; margin-bottom: 1rem; }
+    .why-icon path, .why-icon circle, .why-icon rect, .why-icon polyline, .why-icon line { stroke: var(--red); }
+    .why-card h4 { font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+    .why-card p  { font-size: 0.81rem; color: var(--text-mid); line-height: 1.6; }
 
-    @media (max-width: 480px) {
-      .collection-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
-      .card-body { padding: 0.75rem; }
-      .card-name { font-size: 0.82rem; }
+    /* ══ TESTIMONIALS ══ */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .testi-card {
+      background: var(--white); border-radius: 8px; padding: 2rem;
+      border: 1px solid var(--border); border-top: 3px solid var(--gold);
+    }
+    .stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 2px; margin-bottom: 0.8rem; }
+    .testi-card blockquote { font-size: 0.88rem; color: var(--text-mid); line-height: 1.75; font-style: italic; margin-bottom: 1.3rem; }
+    .testi-card blockquote::before { content: '"'; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); line-height: 0; vertical-align: -0.5rem; margin-right: 4px; }
+    .reviewer { display: flex; align-items: center; gap: 12px; }
+    .rev-av {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gold-pale); border: 1px solid var(--gold-lt);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .rev-av svg { width: 18px; height: 18px; }
+    .rev-av svg path { stroke: var(--gold-dark); }
+    .rev-name { font-size: 0.87rem; font-weight: 600; color: var(--text); }
+    .rev-event { font-size: 0.74rem; color: var(--text-lt); margin-top: 1px; }
+
+    /* ══ CTA STRIP ══ */
+    .cta-strip {
+      background: var(--red-deep);
+      border-top: 1px solid rgba(201,168,76,0.25); padding: 5rem 2rem; text-align: center;
+    }
+    .cta-eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .cta-strip h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem); color: var(--white); font-weight: 700; margin-bottom: 0.8rem;
+    }
+    .cta-strip p { color: rgba(255,255,255,0.65); font-size: 1rem; margin-bottom: 2.5rem; }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold); color: var(--red-deep); font-weight: 700; font-size: 0.95rem;
+      padding: 14px 36px; border-radius: 4px; border: none; cursor: pointer;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .btn-cta:hover { background: var(--gold-dark); }
+    .btn-cta svg { fill: var(--red-deep); }
+
+    /* ══ FOOTER ══ */
+    footer { background: #111; color: rgba(255,255,255,0.65); padding: 4rem 2rem 1.5rem; }
+    .footer-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; }
+    .footer-logo-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; }
+    .footer-logo-text .lm { color: var(--red); font-weight: 900; }
+    .footer-logo-text .lb { color: var(--gold); font-weight: 700; }
+    .footer-brand p { font-size: 0.83rem; line-height: 1.75; margin-top: 0.8rem; max-width: 260px; color: rgba(255,255,255,0.5); }
+    .footer-col h5 { color: var(--gold); font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.2rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.5rem; }
+    .footer-col ul li a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.84rem; transition: color 0.2s; cursor: pointer; }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1180px; margin: 3rem auto 0; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+      font-size: 0.75rem; color: rgba(255,255,255,0.3);
+    }
+    .footer-change-name { color: rgba(255,255,255,0.35); cursor: pointer; font-size: 0.75rem; text-decoration: underline; }
+    .footer-change-name:hover { color: var(--gold); }
+
+    /* ══ WHATSAPP FLOAT ══ */
+    .wa-float {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      width: 56px; height: 56px; background: #25D366; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.45); cursor: pointer;
+      border: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(37,211,102,0.6); }
+    .wa-float svg { width: 28px; height: 28px; fill: white; }
+    .wa-tip {
+      position: absolute; right: 64px; background: #1a1a1a; color: #fff;
+      font-size: 0.75rem; font-weight: 500; padding: 6px 12px; border-radius: 6px;
+      white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s;
+    }
+    .wa-float:hover .wa-tip { opacity: 1; }
+    .wa-tip::after { content: ''; position: absolute; left: 100%; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-left-color: #1a1a1a; }
+
+    /* ══ NAME MODAL ══ */
+    .nm-bg {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      z-index: 600; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .nm-bg.show { display: flex; }
+    .nm-box {
+      background: var(--white); border-radius: 10px; max-width: 380px; width: 100%;
+      padding: 2.5rem 2rem; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: popIn 0.22s ease-out;
+      border-top: 3px solid var(--red);
+    }
+    @keyframes popIn { from { opacity:0; transform: scale(0.94) translateY(16px); } to { opacity:1; transform: scale(1) translateY(0); } }
+    .nm-close { position: absolute; top: 14px; right: 16px; font-size: 1.3rem; background: none; border: none; cursor: pointer; color: var(--text-lt); line-height: 1; }
+    .nm-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; }
+    .nm-box h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--text); margin-bottom: 0.4rem; }
+    .nm-box p  { font-size: 0.84rem; color: var(--text-mid); margin-bottom: 1.5rem; }
+    .nm-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .nm-input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 6px;
+      font-size: 0.95rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
+      margin-bottom: 1.2rem;
+    }
+    .nm-input:focus { border-color: var(--red); }
+    .nm-change { font-size: 0.74rem; color: var(--text-lt); text-align: center; margin-bottom: 1rem; }
+    .nm-change a { color: var(--red); cursor: pointer; }
+    .btn-nm-wa {
+      width: 100%; background: var(--red); color: var(--white); font-size: 0.95rem; font-weight: 700;
+      padding: 13px; border-radius: 4px; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.2s;
+    }
+    .btn-nm-wa:hover { background: var(--red-dark); }
+    .btn-nm-wa svg { fill: white; }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 900px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1/-1; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1.2rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-stats { flex-direction: column; gap: 0; }
+      .hero-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); padding: 1rem 0; }
+      .hero-stat:last-child { border-bottom: none; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .collection-card { padding: 2rem 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-<header class="site-header">
-  <a href="#" class="logo">
-    <svg width="28" height="32" viewBox="0 0 30 34" fill="none">
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#home" class="nav-brand">
+    <svg class="nav-bag-icon" width="30" height="34" viewBox="0 0 30 34" fill="none">
       <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
       <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
-      <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.6"/>
+      <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.5"/>
     </svg>
-    <div class="logo-text"><span class="lm">Moti</span><span class="lb">Bags</span></div>
+    <div class="logo-text"><span class="logo-moti">Moti</span><span class="logo-bags">Bags</span></div>
   </a>
-  <div class="header-tagline">Gift Bag Collections</div>
-  <h1 class="header-title">Browse Our Collections</h1>
-</header>
-
-<div class="page-body">
-  <div class="collection-grid" id="collectionGrid"></div>
+  <ul class="nav-links">
+    <li><a href="#collection" onclick="openDriveCollection()">Bag Collection</a></li>
+    <li><a href="#contact" class="nav-cta-btn">Order Now</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div id="mobileMenu">
+  <a onclick="openDriveCollection();closeMenu()">Bag Collection</a>
+  <a href="#contact" onclick="closeMenu()">Order Now</a>
 </div>
 
-<!-- Contact Modal -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal-box">
-    <h3>Enquire on WhatsApp</h3>
-    <p class="m-sub">Share your name and number — we'll confirm availability and pricing right away.</p>
-    <div class="m-field">
-      <label>Your Name *</label>
-      <input type="text" id="m-name" placeholder="e.g. Priya Sharma"/>
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-label">Premium Collections</div>
+    <h1>Gift Bags Crafted for<br/><span class="h-gold">Every Celebration</span></h1>
+    <p>Handcrafted gift bags for weddings, birthdays, naming ceremonies and house warmings. Custom printing, bulk orders and pan-India delivery.</p>
+    <div class="hero-btns">
+      <a href="#collection" class="btn-gold" onclick="openDriveCollection()">View Bag Collection</a>
+      <a href="#contact" class="btn-outline">Request a Quote</a>
     </div>
-    <div class="m-field">
-      <label>Phone Number *</label>
-      <input type="tel" id="m-phone" placeholder="e.g. 9876543210"/>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="stat-n">5000+</div><div class="stat-l">Orders Delivered</div></div>
+      <div class="hero-stat"><div class="stat-n">200+</div><div class="stat-l">Designs</div></div>
+      <div class="hero-stat"><div class="stat-n">100%</div><div class="stat-l">Custom Made</div></div>
+      <div class="hero-stat"><div class="stat-n">4.9 / 5</div><div class="stat-l">Customer Rating</div></div>
     </div>
-    <button class="btn-wa-submit" onclick="submitContact()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-      Open WhatsApp
+  </div>
+</section>
+
+<!-- ══ COLLECTION ══ -->
+<div class="occasions-wrap" id="collection">
+  <div class="section">
+    <div class="section-hd">
+      <div class="section-eyebrow">Browse Our Work</div>
+      <h2>Moti Bags <em>Collection</em></h2>
+      <p>Click below to browse all our bag designs — weddings, birthdays, naming ceremonies and house warmings, all in one place.</p>
+    </div>
+    <div class="collection-center">
+      <div class="collection-card" onclick="openDriveCollection()">
+        <svg class="coll-icon" viewBox="0 0 80 80" fill="none">
+          <path d="M28 30 C28 14 52 14 52 30" stroke="#C9A84C" stroke-width="2.8" stroke-linecap="round"/>
+          <rect x="8" y="28" width="64" height="44" rx="5" stroke="#C9A84C" stroke-width="2.8"/>
+          <line x1="8" y1="44" x2="72" y2="44" stroke="#B8291E" stroke-width="2" stroke-opacity="0.6"/>
+          <circle cx="40" cy="57" r="6" stroke="#C9A84C" stroke-width="2.2"/>
+        </svg>
+        <h3>Bag Collection</h3>
+        <p>Browse all our premium gift bag designs for every occasion — weddings, birthdays, naming ceremonies and house warmings. Like what you see? Contact us on WhatsApp to place an order.</p>
+        <span class="coll-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open Bag Collection
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WHY US ══ -->
+<div class="why-wrap">
+  <div class="section">
+    <div class="section-hd">
+      <div class="section-eyebrow">Why Choose Moti Bags</div>
+      <h2>Quality You Can <em>See and Feel</em></h2>
+      <p>From the first design call to the last delivery, we make the process effortless.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <svg class="why-icon" viewBox="0 0 36 36" fill="none"><rect x="3" y="3" width="30" height="30" rx="4" stroke-width="2"/><path d="M10 18 L15 23 L26 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>Fully Custom</h4><p>Every bag is made to your exact specification — color, size, fabric and print.</p>
+      </div>
+      <div class="why-card">
+        <svg class="why-icon" viewBox="0 0 36 36" fill="none"><rect x="6" y="4" width="24" height="28" rx="3" stroke-width="2"/><line x1="11" y1="12" x2="25" y2="12" stroke-width="2"/><line x1="11" y1="18" x2="25" y2="18" stroke-width="2"/><line x1="11" y1="24" x2="19" y2="24" stroke-width="2"/></svg>
+        <h4>Bulk Orders</h4><p>From 50 to 50,000 bags — every order receives the same care and precision.</p>
+      </div>
+      <div class="why-card">
+        <svg class="why-icon" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="14" stroke-width="2"/><polyline points="18,9 18,18 24,22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>On-Time Delivery</h4><p>Pan-India delivery. Urgent orders dispatched within 24–48 hours.</p>
+      </div>
+      <div class="why-card">
+        <svg class="why-icon" viewBox="0 0 36 36" fill="none"><polygon points="18,3 22,13 33,13 24,20 27,31 18,24 9,31 12,20 3,13 14,13" stroke-width="2" stroke-linejoin="round"/></svg>
+        <h4>Premium Quality</h4><p>Finest fabrics, inks and finishes — bags that leave a lasting impression.</p>
+      </div>
+      <div class="why-card">
+        <svg class="why-icon" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="14" stroke-width="2"/><line x1="18" y1="8" x2="18" y2="18" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="18" x2="26" y2="22" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <h4>Factory Pricing</h4><p>Direct from our factory — no middlemen, best market rates guaranteed.</p>
+      </div>
+      <div class="why-card">
+        <svg class="why-icon" viewBox="0 0 36 36" fill="none"><path d="M6 28 C6 22 30 22 30 28" stroke-width="2"/><circle cx="18" cy="13" r="7" stroke-width="2"/></svg>
+        <h4>Personal Support</h4><p>Dedicated WhatsApp support from design approval to doorstep delivery.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TESTIMONIALS ══ -->
+<div class="section">
+  <div class="section-hd">
+    <div class="section-eyebrow">Customer Reviews</div>
+    <h2>Trusted by <em>Thousands</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>Ordered 500 wedding bags and they were exactly what we wanted. The gold foil printing was perfect and everything arrived two days early. Every guest asked where we got them from.</blockquote>
+      <div class="reviewer">
+        <div class="rev-av"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke-width="1.5"/><path d="M3 18 C3 14 17 14 17 18" stroke-width="1.5"/></svg></div>
+        <div><div class="rev-name">Priya Sharma</div><div class="rev-event">Wedding — 500 bags, Bangalore</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>Beautiful naming ceremony bags with my son's name printed on each one. The fabric quality was better than I expected and the colours matched our invitation perfectly.</blockquote>
+      <div class="reviewer">
+        <div class="rev-av"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke-width="1.5"/><path d="M3 18 C3 14 17 14 17 18" stroke-width="1.5"/></svg></div>
+        <div><div class="rev-name">Meera Iyer</div><div class="rev-event">Naming Ceremony — 150 bags</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>We used Moti Bags for our Griha Pravesh and the response was overwhelming. Traditional design, great quality and very reasonable pricing for bulk. Highly recommended.</blockquote>
+      <div class="reviewer">
+        <div class="rev-av"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke-width="1.5"/><path d="M3 18 C3 14 17 14 17 18" stroke-width="1.5"/></svg></div>
+        <div><div class="rev-name">Suresh Kumar</div><div class="rev-event">House Warming — 200 bags</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CTA ══ -->
+<div class="cta-strip" id="contact">
+  <div class="cta-eyebrow">Get in Touch</div>
+  <h2>Ready to Place an Order?</h2>
+  <p>Chat with us on WhatsApp for an instant quote, free design consultation and full catalog.</p>
+  <button class="btn-cta" onclick="goWA('I\'d like to place an order. Please share your catalog and pricing.')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    Chat on WhatsApp
+  </button>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-text"><span class="lm">Moti</span><span class="lb">Bags</span></div>
+      <p>Handcrafted premium gift bags for every celebration. Custom orders and bulk supply across India.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Collections</h5>
+      <ul>
+        <li><a onclick="openDriveCollection()">Bag Collection</a></li>
+        <li><a href="#contact">Order Now</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a onclick="goWA('Hello, I would like to know more about your gift bags.')">WhatsApp: +91 97411 19072</a></li>
+        <li><a href="mailto:yadikirajesh24@gmail.com">yadikirajesh24@gmail.com</a></li>
+        <li><a href="admin.html">Admin Panel</a></li>
+      </ul>
+      <div style="margin-top:1.2rem">
+        <span class="footer-change-name" onclick="resetContact()">Update my details</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Moti Bags. All rights reserved.</span>
+    <span>Premium Collections — Pan India Delivery</span>
+  </div>
+</footer>
+
+<!-- ══ WHATSAPP FLOAT ══ -->
+<button class="wa-float" onclick="goWA('Hello, I would like to know more about your gift bags.')" aria-label="Chat on WhatsApp">
+  <span class="wa-tip">Chat with us</span>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</button>
+
+<!-- ══ NAME MODAL ══ -->
+<div class="nm-bg" id="nameModal">
+  <div class="nm-box">
+    <button class="nm-close" onclick="closeNM()">&#x2715;</button>
+    <div class="nm-logo">
+      <svg width="24" height="28" viewBox="0 0 30 34" fill="none">
+        <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
+      </svg>
+      <span style="font-family:'Playfair Display',serif;font-size:1.1rem"><span style="color:var(--red);font-weight:900">Moti</span><span style="color:var(--gold-dark);font-weight:700">Bags</span></span>
+    </div>
+    <h3>Quick Details</h3>
+    <p>Share your name and number so we can respond to you on WhatsApp.</p>
+    <label class="nm-label" for="nm-input">Your Name</label>
+    <input class="nm-input" id="nm-input" type="text" placeholder="Enter your full name" onkeydown="if(event.key==='Enter')document.getElementById('nm-phone').focus()"/>
+    <label class="nm-label" for="nm-phone">Mobile Number</label>
+    <input class="nm-input" id="nm-phone" type="tel" placeholder="e.g. 98765 43210" onkeydown="if(event.key==='Enter')submitContact()"/>
+    <div class="nm-change" id="nm-change" style="display:none">
+      Continuing as <strong id="nm-saved-name"></strong>. <a onclick="resetContact()">Change</a>
+    </div>
+    <button class="btn-nm-wa" onclick="submitContact()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Continue to WhatsApp
     </button>
-    <span class="m-cancel" onclick="closeModal()">Cancel</span>
   </div>
 </div>
 
 <script>
-  const WA      = '919741119072';
-  const DATA_KEY = 'motibags_items';
-  let pendingBag = null;
+  const WA = '919741119072';
+  let pendingMsg = '';
 
-  function getData() {
-    try { return JSON.parse(localStorage.getItem(DATA_KEY) || '[]'); } catch(e) { return []; }
-  }
-
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  const BAG_PLACEHOLDER = `<svg width="52" height="52" viewBox="0 0 30 34" fill="none"><path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/><rect x="2" y="12" width="26" height="20" rx="3" stroke="#C9A84C" stroke-width="2"/></svg>`;
-  const WA_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`;
-
-  function render() {
-    const items = getData();
-    const grid  = document.getElementById('collectionGrid');
-    if (!items.length) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-        <svg class="empty-icon" width="72" height="72" viewBox="0 0 30 34" fill="none">
-          <path d="M9 13 C9 6 21 6 21 13" stroke="#888" stroke-width="2" stroke-linecap="round"/>
-          <rect x="2" y="12" width="26" height="20" rx="3" stroke="#888" stroke-width="2"/>
-        </svg>
-        <h2>Coming Soon</h2>
-        <p>Our collection will be available here shortly.</p>
-      </div>`;
-      return;
+  /* ── DRIVE COLLECTION ── */
+  function openDriveCollection() {
+    const link = localStorage.getItem('mb_drive_link');
+    if (link) {
+      window.open(link, '_blank');
+    } else {
+      alert('Collection link not set yet. Please check back soon!');
     }
-    grid.innerHTML = items.map(item => `
-      <div class="bag-card">
-        <div class="card-img">
-          ${item.img
-            ? `<img src="${esc(item.img)}" alt="${esc(item.name)}" onerror="this.parentElement.innerHTML='<div style=&quot;opacity:.25&quot;>${BAG_PLACEHOLDER}</div>'">`
-            : `<div style="opacity:.25">${BAG_PLACEHOLDER}</div>`}
-        </div>
-        <div class="card-body">
-          <div class="card-name">${esc(item.name)}</div>
-          ${item.price ? `<div class="card-price">${esc(item.price)}</div>` : ''}
-          <button class="btn-enquire" onclick="openModal('${esc(item.id)}')">
-            ${WA_ICON} Enquire on WhatsApp
-          </button>
-        </div>
-      </div>`).join('');
   }
 
-  function openModal(itemId) {
-    pendingBag = getData().find(i => i.id === itemId) || null;
-    try {
-      const c = JSON.parse(localStorage.getItem('mb_contact') || '{}');
-      document.getElementById('m-name').value  = c.name  || '';
-      document.getElementById('m-phone').value = c.phone || '';
-    } catch(e) {}
-    document.getElementById('modalBg').classList.add('open');
-    setTimeout(() => document.getElementById('m-name').focus(), 100);
+  /* ── WHATSAPP ── */
+  function goWA(msg) {
+    const { name, phone } = getSavedContact();
+    if (name && phone) {
+      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent('Hi Moti Bags!\n\nName: ' + name + '\nPhone: ' + phone + '\n\n' + msg), '_blank');
+    } else {
+      pendingMsg = msg;
+      showNM();
+    }
   }
 
-  function closeModal() {
-    document.getElementById('modalBg').classList.remove('open');
-    pendingBag = null;
+  /* ── CONTACT MODAL ── */
+  function getSavedContact() {
+    try { return JSON.parse(localStorage.getItem('mb_contact') || '{}'); } catch(e) { return {}; }
   }
+
+  function showNM() {
+    const { name, phone } = getSavedContact();
+    const modal = document.getElementById('nameModal');
+    const changeDiv = document.getElementById('nm-change');
+    const savedNameEl = document.getElementById('nm-saved-name');
+    if (name && phone) {
+      document.getElementById('nm-input').value = name;
+      document.getElementById('nm-phone').value = phone;
+      if (changeDiv && savedNameEl) { savedNameEl.textContent = name; changeDiv.style.display = 'block'; }
+    } else {
+      if (changeDiv) changeDiv.style.display = 'none';
+    }
+    modal.classList.add('show');
+    setTimeout(() => document.getElementById(name ? 'nm-phone' : 'nm-input').focus(), 100);
+  }
+
+  function closeNM() { document.getElementById('nameModal').classList.remove('show'); }
 
   function submitContact() {
-    const name  = document.getElementById('m-name').value.trim();
-    const phone = document.getElementById('m-phone').value.trim();
-    if (!name)  { document.getElementById('m-name').focus();  return; }
-    if (!phone) { document.getElementById('m-phone').focus(); return; }
-
+    const name  = document.getElementById('nm-input').value.trim();
+    const phone = document.getElementById('nm-phone').value.trim();
+    if (!name)  { document.getElementById('nm-input').focus();  return; }
+    if (!phone) { document.getElementById('nm-phone').focus(); return; }
     localStorage.setItem('mb_contact', JSON.stringify({ name, phone }));
     saveLead(name, phone);
+    closeNM();
+    const msg = pendingMsg || 'Hello, I would like to know more about your gift bags.';
+    pendingMsg = '';
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent('Hi Moti Bags!\n\nName: ' + name + '\nPhone: ' + phone + '\n\n' + msg), '_blank');
+  }
 
-    let msg = `Hi Moti Bags!\n\nName: ${name}\nPhone: ${phone}\n\n`;
-    if (pendingBag) {
-      msg += `I'm interested in *${pendingBag.name}*${pendingBag.price ? ' (' + pendingBag.price + '/bag)' : ''}.\nPlease share availability and details. Thank you!`;
-    } else {
-      msg += `I would like to enquire about your bag collections. Please share details. Thank you!`;
-    }
-    closeModal();
-    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank');
+  function resetContact() {
+    localStorage.removeItem('mb_contact');
+    document.getElementById('nm-input').value  = '';
+    document.getElementById('nm-phone').value  = '';
+    const changeDiv = document.getElementById('nm-change');
+    if (changeDiv) changeDiv.style.display = 'none';
   }
 
   function saveLead(name, phone) {
@@ -234,14 +590,17 @@
     } catch(e) {}
   }
 
-  document.getElementById('modalBg').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-    if (e.key === 'Enter' && document.getElementById('modalBg').classList.contains('open')) submitContact();
+  /* ── MOBILE MENU ── */
+  function toggleMenu() {
+    const m = document.getElementById('mobileMenu');
+    m.style.display = m.style.display === 'block' ? 'none' : 'block';
+  }
+  function closeMenu() { document.getElementById('mobileMenu').style.display = 'none'; }
+  document.addEventListener('click', e => {
+    const menu = document.getElementById('mobileMenu');
+    if (menu.style.display === 'block' && !menu.contains(e.target) && !e.target.closest('.hamburger')) closeMenu();
   });
-
-  window.addEventListener('storage', e => { if (e.key === DATA_KEY) render(); });
-  render();
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeNM(); closeMenu(); } });
 </script>
 </body>
 </html>

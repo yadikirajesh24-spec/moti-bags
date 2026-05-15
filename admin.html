@@ -309,6 +309,24 @@
 
     <!-- SETTINGS PANEL -->
     <div class="panel" id="panel-settings">
+
+      <div class="settings-card" style="border-top:3px solid var(--gold)">
+        <h3>Google Drive Folder Link</h3>
+        <p class="s-sub">Paste your Google Drive folder link here. Customers who click "Bag Collection" on the website will be taken directly to this folder to view all your bag photos.</p>
+        <div style="background:var(--bg-alt);border-radius:8px;padding:1rem;margin-bottom:1.2rem;font-size:0.8rem;line-height:1.7;color:var(--text-mid)">
+          <strong style="color:var(--text);display:block;margin-bottom:0.3rem">How to get your folder link:</strong>
+          1. Open <strong>Google Drive</strong> and go to your bags folder<br/>
+          2. Right-click the folder → <strong>Share</strong> → set to <strong>"Anyone with the link"</strong><br/>
+          3. Click <strong>Copy link</strong> and paste it below → Save
+        </div>
+        <div class="fg" style="margin-bottom:1.2rem">
+          <label>Drive Folder URL</label>
+          <input type="text" id="drive-link" placeholder="https://drive.google.com/drive/folders/…"/>
+        </div>
+        <button class="btn-add" style="margin-top:0" onclick="saveDriveLink()">Save Drive Link</button>
+        <div id="drive-status" style="margin-top:0.9rem;font-size:0.8rem;display:none"></div>
+      </div>
+
       <div class="settings-card">
         <h3>Change Password</h3>
         <p class="s-sub">Update your admin login password.</p>
@@ -498,6 +516,27 @@
     clearTimeout(t._t);
     t._t = setTimeout(() => t.classList.remove('show'), 3000);
   }
+
+  /* ── DRIVE LINK ── */
+  function saveDriveLink() {
+    const link = document.getElementById('drive-link').value.trim();
+    if (!link) { toast('Please paste your Google Drive folder link', false); return; }
+    localStorage.setItem('mb_drive_link', link);
+    const el = document.getElementById('drive-status');
+    el.style.display = 'block';
+    el.innerHTML = `<span style="color:var(--success);font-weight:600">Saved!</span> Customers clicking "Bag Collection" will now open your Drive folder.`;
+    toast('Drive link saved', true);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const saved = localStorage.getItem('mb_drive_link');
+    if (saved) {
+      document.getElementById('drive-link').value = saved;
+      const el = document.getElementById('drive-status');
+      el.style.display = 'block';
+      el.innerHTML = `<span style="color:var(--success);font-weight:600">Active</span> — Drive link is set for this site.`;
+    }
+  });
 
   window.addEventListener('storage', e => { if (e.key === DATA_KEY) renderList(); if (e.key === LEADS_KEY) renderLeads(); });
 </script>
