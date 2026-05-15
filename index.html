@@ -241,6 +241,41 @@
     .wa-float:hover .wa-tip { opacity: 1; }
     .wa-tip::after { content: ''; position: absolute; left: 100%; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-left-color: #1a1a1a; }
 
+    /* ══ ENTRY MODAL ══ */
+    .entry-bg {
+      position: fixed; inset: 0; background: rgba(30,5,2,0.72); z-index: 800;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .entry-box {
+      background: var(--white); border-radius: 16px; max-width: 400px; width: 100%;
+      padding: 2.5rem 2rem; text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4); border-top: 4px solid var(--gold);
+      animation: popIn 0.28s ease-out;
+    }
+    .entry-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1.3rem; }
+    .entry-logo-text { font-family: 'Inter', sans-serif; font-size: 1.4rem; font-weight: 800; }
+    .entry-logo-text .lm { color: var(--red); }
+    .entry-logo-text .lb { color: var(--gold-dark); }
+    .entry-box h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--text); margin-bottom: 0.4rem; }
+    .entry-box .e-sub { font-size: 0.84rem; color: var(--text-mid); margin-bottom: 1.6rem; line-height: 1.6; }
+    .e-field { text-align: left; margin-bottom: 1rem; }
+    .e-field label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .e-field input {
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 0.95rem; font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s; background: var(--bg);
+    }
+    .e-field input:focus { border-color: var(--red); background: var(--white); }
+    .btn-entry {
+      width: 100%; background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: var(--white); font-size: 0.95rem; font-weight: 700;
+      padding: 13px; border-radius: 50px; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; margin-top: 0.4rem; transition: opacity 0.2s;
+    }
+    .btn-entry:hover { opacity: 0.88; }
+    .entry-skip { display: block; margin-top: 0.9rem; font-size: 0.78rem; color: var(--text-lt); cursor: pointer; }
+    .entry-skip:hover { color: var(--text-mid); }
+
     /* ══ NAME MODAL ══ */
     .nm-bg {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55);
@@ -484,6 +519,39 @@
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
 </button>
 
+<!-- Hidden form for Netlify Forms detection -->
+<form name="leads" netlify netlify-honeypot="bot-field" hidden>
+  <input name="bot-field"/>
+  <input name="name"/>
+  <input name="phone"/>
+</form>
+
+<!-- ══ ENTRY MODAL ══ -->
+<div class="entry-bg" id="entryModal" style="display:none">
+  <div class="entry-box">
+    <div class="entry-logo">
+      <svg width="28" height="32" viewBox="0 0 30 34" fill="none">
+        <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
+        <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.5"/>
+      </svg>
+      <div class="entry-logo-text"><span class="lm">Moti</span><span class="lb">Bags</span></div>
+    </div>
+    <h3>Welcome!</h3>
+    <p class="e-sub">Share your details so we can help you with your order and keep in touch.</p>
+    <div class="e-field">
+      <label for="e-name">Your Name *</label>
+      <input type="text" id="e-name" placeholder="e.g. Priya Sharma" autocomplete="name"/>
+    </div>
+    <div class="e-field">
+      <label for="e-phone">Mobile Number *</label>
+      <input type="tel" id="e-phone" placeholder="e.g. 98765 43210" autocomplete="tel"/>
+    </div>
+    <button class="btn-entry" onclick="submitEntry()">Browse Collection</button>
+    <span class="entry-skip" onclick="skipEntry()">Skip for now</span>
+  </div>
+</div>
+
 <!-- ══ NAME MODAL ══ -->
 <div class="nm-bg" id="nameModal">
   <div class="nm-box">
@@ -513,17 +581,53 @@
 
 <script>
   const WA = '919741119072';
+
+  // ← PASTE YOUR GOOGLE DRIVE FOLDER LINK HERE
+  const DRIVE_LINK = '';
+
   let pendingMsg = '';
 
   /* ── DRIVE COLLECTION ── */
   function openDriveCollection() {
-    const link = localStorage.getItem('mb_drive_link');
+    const link = DRIVE_LINK || localStorage.getItem('mb_drive_link') || '';
     if (link) {
       window.open(link, '_blank');
     } else {
-      alert('Collection link not set yet. Please check back soon!');
+      alert('Collection coming soon! Contact us on WhatsApp for the full catalog.');
     }
   }
+
+  /* ── ENTRY MODAL ── */
+  function showEntryModal() {
+    const saved = getSavedContact();
+    if (saved.name && saved.phone) return; // already captured
+    document.getElementById('entryModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('e-name').focus(), 200);
+  }
+
+  function submitEntry() {
+    const name  = document.getElementById('e-name').value.trim();
+    const phone = document.getElementById('e-phone').value.trim();
+    if (!name)  { document.getElementById('e-name').focus();  return; }
+    if (!phone) { document.getElementById('e-phone').focus(); return; }
+    // Save locally
+    localStorage.setItem('mb_contact', JSON.stringify({ name, phone }));
+    // Submit to Netlify Forms (cross-device — shows in Netlify dashboard)
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ 'form-name': 'leads', name, phone }).toString()
+    }).catch(() => {}); // silent fail — local save is the fallback
+    // Also save to localStorage leads for admin panel same-device view
+    saveLead(name, phone);
+    document.getElementById('entryModal').style.display = 'none';
+  }
+
+  function skipEntry() {
+    document.getElementById('entryModal').style.display = 'none';
+  }
+
+  window.addEventListener('load', showEntryModal);
 
   /* ── WHATSAPP ── */
   function goWA(msg) {

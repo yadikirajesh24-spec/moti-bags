@@ -297,12 +297,18 @@
 
     <!-- LEADS PANEL -->
     <div class="panel" id="panel-leads">
+      <div class="list-card" style="margin-bottom:1.2rem;background:var(--gold-lt);border:1px solid rgba(168,134,42,0.25)">
+        <p style="font-size:0.84rem;color:var(--text-mid);line-height:1.7">
+          <strong style="color:var(--gold-dark)">All leads from customers</strong> — including those on other devices — are captured via <strong>Netlify Forms</strong>.<br/>
+          <a href="https://app.netlify.com" target="_blank" style="color:var(--red);font-weight:700;text-decoration:none">→ Open Netlify Dashboard → Forms → "leads"</a>
+          &nbsp;to see every submission.
+        </p>
+      </div>
       <div class="list-card">
         <div class="list-head">
-          <h3>Customer Leads</h3>
+          <h3>Recent Leads <span style="font-size:0.72rem;font-weight:400;color:var(--text-mid)">(this device)</span></h3>
           <button class="btn-clear-all" onclick="clearLeads()">Clear All</button>
         </div>
-        <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:1.2rem">Customers who entered their name and phone before messaging on WhatsApp.</p>
         <div id="leads-list"></div>
       </div>
     </div>
