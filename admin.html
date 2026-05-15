@@ -3,25 +3,16 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moti Bags – Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <title>Moti Bags — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --red:       #B8291E;
-      --red-dark:  #8B1A12;
-      --red-deep:  #3D0D08;
-      --gold:      #C9A84C;
-      --gold-dark: #A8862A;
-      --gold-lt:   #F8F0DC;
-      --white:     #FFFFFF;
-      --bg:        #FAFAF8;
-      --bg-alt:    #F4F1EC;
-      --border:    #E8E0D0;
-      --text:      #1A1008;
-      --text-mid:  #6B5B45;
-      --success:   #1A7A3C;
-      --danger:    #B8291E;
+      --red: #B8291E; --red-dark: #8B1A12; --red-deep: #3D0D08;
+      --gold: #C9A84C; --gold-dark: #A8862A; --gold-lt: #F8F0DC;
+      --bg: #FAFAF8; --bg-alt: #F4F1EC; --border: #E8E0D0;
+      --text: #1A1008; --text-mid: #6B5B45; --text-lt: #999;
+      --success: #1A7A3C; --danger: #B8291E;
     }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
@@ -32,18 +23,15 @@
       padding: 1rem;
     }
     .login-box {
-      background: var(--white); border-radius: 20px; padding: 3rem 2.5rem;
-      width: 100%; max-width: 390px; text-align: center;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
-      border-top: 4px solid var(--gold);
+      background: white; border-radius: 20px; padding: 3rem 2.5rem;
+      width: 100%; max-width: 380px; text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4); border-top: 4px solid var(--gold);
     }
-    .login-logo { margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .login-logo-text { text-align: left; }
-    .login-logo-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; line-height: 1; }
-    .login-logo-title .lm { color: var(--red); font-weight: 900; }
-    .login-logo-title .lb { color: var(--gold-dark); font-weight: 700; }
-    .login-logo-sub { font-size: 0.6rem; color: var(--text-mid); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
-    .login-box h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--red-dark); margin-bottom: 0.3rem; }
+    .login-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1.2rem; }
+    .login-logo-name { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 800; }
+    .login-logo-name .lm { color: var(--red); }
+    .login-logo-name .lb { color: var(--gold-dark); }
+    .login-box h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--red-dark); margin-bottom: 0.25rem; }
     .login-box p  { font-size: 0.82rem; color: var(--text-mid); margin-bottom: 2rem; }
     .login-box input {
       width: 100%; padding: 12px 16px; border: 2px solid var(--border);
@@ -54,583 +42,292 @@
     .login-box input:focus { border-color: var(--red); }
     .btn-login {
       width: 100%; background: linear-gradient(135deg, var(--red), var(--red-dark));
-      color: var(--white); font-size: 1rem; font-weight: 700;
-      padding: 13px; border-radius: 50px; border: none; cursor: pointer; transition: opacity 0.2s;
-      font-family: 'Inter', sans-serif;
+      color: white; font-size: 1rem; font-weight: 700; padding: 13px;
+      border-radius: 50px; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s;
     }
     .btn-login:hover { opacity: 0.88; }
     .login-err { color: var(--danger); font-size: 0.82rem; margin-top: 0.5rem; display: none; }
     .login-hint { font-size: 0.72rem; color: #aaa; margin-top: 1.4rem; }
 
-    /* ── LAYOUT ── */
+    /* ── ADMIN ── */
     .admin-wrap { display: none; }
-    .admin-wrap.visible { display: flex; min-height: 100vh; }
+    .admin-wrap.visible { display: block; }
 
-    /* SIDEBAR */
-    .sidebar {
-      width: 240px; flex-shrink: 0;
-      background: linear-gradient(175deg, var(--red-deep) 0%, #5C1810 100%);
-      display: flex; flex-direction: column; padding: 1.5rem 0;
-    }
-    .sb-logo {
-      display: flex; align-items: center; gap: 10px;
-      padding: 0 1.4rem 1.5rem; border-bottom: 1px solid rgba(201,168,76,0.2);
-    }
-    .sb-logo-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; }
-    .sb-logo-name .lm { color: var(--gold); }
-    .sb-logo-name .lb { color: rgba(201,168,76,0.7); }
-    .sb-logo-sub  { font-size: 0.56rem; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
-    .sb-nav { flex: 1; padding: 0.8rem 0; }
-    .sb-nav a {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 1.4rem; color: rgba(255,255,255,0.6); text-decoration: none;
-      font-size: 0.85rem; font-weight: 500; transition: all 0.2s; position: relative;
-    }
-    .sb-nav a:hover, .sb-nav a.active { background: rgba(201,168,76,0.12); color: var(--gold); }
-    .sb-nav a.active::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold); border-radius:0 3px 3px 0; }
-    .sb-nav a .cnt { margin-left:auto; background:var(--gold); color:var(--red-deep); font-size:0.65rem; font-weight:800; padding:2px 7px; border-radius:10px; min-width:22px; text-align:center; }
-    .sb-nav-icon { width:16px; height:16px; flex-shrink:0; opacity:0.7; }
-    .sb-nav a:hover .sb-nav-icon, .sb-nav a.active .sb-nav-icon { opacity:1; }
-    .sb-footer { padding: 1rem 1.4rem; border-top: 1px solid rgba(201,168,76,0.15); }
-    .btn-view { display:block; text-align:center; background:rgba(201,168,76,0.12); color:var(--gold); text-decoration:none; font-size:0.81rem; font-weight:700; padding:9px; border-radius:10px; margin-bottom:0.5rem; transition:background 0.2s; letter-spacing:0.3px; }
-    .btn-view:hover { background:rgba(201,168,76,0.22); }
-    .btn-signout { display:block; text-align:center; background:none; color:rgba(255,255,255,0.35); font-size:0.74rem; border:none; cursor:pointer; width:100%; padding:6px; transition:color 0.2s; font-family:'Inter',sans-serif; }
-    .btn-signout:hover { color:rgba(255,255,255,0.65); }
-
-    /* MAIN */
-    .main-area { flex: 1; overflow-y: auto; }
+    /* TOP BAR */
     .topbar {
-      background: var(--white); padding: 0 2rem; height: 62px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      background: linear-gradient(135deg, var(--red-deep), #5C1810, var(--red-dark));
+      padding: 0 2rem; height: 60px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 2px solid var(--gold);
+      position: sticky; top: 0; z-index: 50;
     }
-    .topbar h1 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--red-dark); }
-    .topbar-badge {
-      background: var(--gold-lt); color: var(--gold-dark); font-size: 0.7rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; border: 1px solid rgba(168,134,42,0.3);
-    }
-    .content { padding: 2rem; }
+    .tb-logo { display: flex; align-items: center; gap: 10px; }
+    .tb-logo-name { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 800; }
+    .tb-logo-name .lm { color: var(--red); -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
+    .tb-logo-name .lb { color: var(--gold); }
+    .tb-logo-sub { font-size: 0.58rem; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; }
+    .tb-actions { display: flex; align-items: center; gap: 0.7rem; }
+    .btn-view-site { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.35); font-size: 0.78rem; font-weight: 700; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none; transition: background 0.2s; }
+    .btn-view-site:hover { background: rgba(201,168,76,0.28); }
+    .btn-signout { background: none; color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.15); font-size: 0.78rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
+    .btn-signout:hover { color: rgba(255,255,255,0.75); }
 
-    /* STATS */
-    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2rem; }
-    .stat-box {
-      background: var(--white); border-radius: 14px; padding: 1.2rem 1rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      display: flex; align-items: center; gap: 0.9rem;
-      border-left: 3px solid;
+    /* TABS */
+    .tab-bar {
+      background: white; border-bottom: 1px solid var(--border);
+      display: flex; gap: 0; padding: 0 2rem;
     }
-    .stat-box.s-wedding  { border-color: var(--red); }
-    .stat-box.s-birthday { border-color: #C07830; }
-    .stat-box.s-naming   { border-color: var(--gold); }
-    .stat-box.s-house    { border-color: var(--gold-dark); }
-    .stat-icon-wrap { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .s-wedding  .stat-icon-wrap { background:rgba(184,41,30,0.08); }
-    .s-birthday .stat-icon-wrap { background:rgba(192,120,48,0.1); }
-    .s-naming   .stat-icon-wrap { background:rgba(201,168,76,0.12); }
-    .s-house    .stat-icon-wrap { background:rgba(168,134,42,0.1); }
-    .stat-num  { font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 900; color: var(--text); line-height:1; }
-    .stat-lbl  { font-size: 0.72rem; color: var(--text-mid); margin-top:2px; }
+    .tab-btn {
+      padding: 14px 20px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+      border: none; background: none; font-family: 'Inter', sans-serif; color: var(--text-mid);
+      border-bottom: 2px solid transparent; transition: all 0.2s; margin-bottom: -1px;
+    }
+    .tab-btn.active { color: var(--red); border-bottom-color: var(--red); }
+    .tab-btn:hover { color: var(--text); }
 
-    /* SECTION PANELS */
-    .s-panel { display: none; }
-    .s-panel.active { display: block; }
+    /* CONTENT */
+    .content { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* PANEL */
+    .panel { display: none; }
+    .panel.active { display: block; }
 
     /* GUIDE */
     .guide-box {
       background: var(--gold-lt); border: 1px solid rgba(168,134,42,0.25);
-      border-radius: 14px; padding: 1.4rem 1.5rem; margin-bottom: 2rem;
+      border-radius: 14px; padding: 1.4rem 1.6rem; margin-bottom: 1.8rem;
     }
-    .guide-box h4 { color: var(--gold-dark); font-size: 0.88rem; font-weight: 700; margin-bottom: 0.8rem; display:flex; align-items:center; gap:8px; }
+    .guide-box h4 { font-size: 0.88rem; font-weight: 700; color: var(--gold-dark); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 8px; }
     .steps-list { list-style: none; counter-reset: s; }
-    .steps-list li {
-      counter-increment: s; display: flex; gap: 10px; align-items: flex-start;
-      font-size: 0.82rem; color: var(--text-mid); padding: 5px 0; line-height: 1.5;
-    }
-    .steps-list li::before {
-      content: counter(s); background: var(--red); color: var(--white);
-      width: 20px; height: 20px; border-radius: 50%; font-size: 0.68rem; font-weight: 800;
-      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    }
-    .steps-list code { background: rgba(184,41,30,0.07); color: var(--red); padding: 1px 6px; border-radius: 4px; font-family: monospace; }
+    .steps-list li { counter-increment: s; display: flex; gap: 10px; align-items: flex-start; font-size: 0.83rem; color: var(--text-mid); padding: 5px 0; line-height: 1.55; }
+    .steps-list li::before { content: counter(s); background: var(--red); color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 0.68rem; font-weight: 800; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
-    /* UPLOAD CARD */
-    .upload-box {
-      background: var(--white); border-radius: 16px; padding: 2rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 2rem;
-      border-top: 3px solid var(--gold);
+    /* ADD FORM */
+    .add-card {
+      background: white; border-radius: 16px; padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05); border-top: 3px solid var(--gold);
+      margin-bottom: 2rem;
     }
-    .upload-box h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--red-dark); margin-bottom: 0.25rem; }
-    .upload-box .ub-sub { font-size: 0.81rem; color: var(--text-mid); margin-bottom: 1.5rem; }
-    .fg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .add-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--red-dark); margin-bottom: 0.25rem; }
+    .add-card .card-sub { font-size: 0.81rem; color: var(--text-mid); margin-bottom: 1.5rem; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .fg { display: flex; flex-direction: column; gap: 5px; }
     .fg.full { grid-column: 1/-1; }
-    .fg label { font-size: 0.78rem; font-weight: 600; color: var(--text); letter-spacing: 0.2px; }
-    .fg input, .fg textarea, .fg select {
+    .fg label { font-size: 0.78rem; font-weight: 600; color: var(--text); }
+    .fg input {
       padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 9px;
-      font-size: 0.84rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
-      background: var(--bg); color: var(--text);
+      font-size: 0.88rem; font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s; background: var(--bg); color: var(--text);
     }
-    .fg input:focus, .fg textarea:focus { border-color: var(--red); background: var(--white); }
-    .fg textarea { height: 68px; resize: none; }
+    .fg input:focus { border-color: var(--red); background: white; }
 
-    /* DROP ZONE */
-    .drop-zone {
-      border: 2px dashed rgba(184,41,30,0.25); border-radius: 10px;
-      padding: 1.8rem 1rem; text-align: center; cursor: pointer;
-      background: var(--bg-alt); position: relative; transition: all 0.2s;
+    /* URL PASTE AREA */
+    .url-area { grid-column: 1/-1; }
+    .url-paste-input {
+      width: 100%; padding: 11px 13px; border: 2px dashed rgba(184,41,30,0.3); border-radius: 9px;
+      font-size: 0.86rem; font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s, background 0.2s; background: var(--bg-alt); color: var(--text);
     }
-    .drop-zone:hover, .drop-zone.over { border-color: var(--red); background: rgba(184,41,30,0.03); }
-    .drop-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-    .dz-icon { margin-bottom: 0.5rem; display:flex; justify-content:center; }
-    .dz-main { font-size: 0.84rem; font-weight: 700; color: var(--red-dark); }
-    .dz-hint { font-size: 0.72rem; color: var(--text-mid); margin-top: 3px; }
+    .url-paste-input:focus { border-color: var(--red); border-style: solid; background: white; }
+    .url-paste-input::placeholder { color: #aaa; font-style: italic; }
+    .url-hint { font-size: 0.72rem; color: var(--text-lt); margin-top: 4px; }
 
-    .preview-wrap { display:none; border-radius:10px; overflow:hidden; height:175px; border:1.5px solid var(--border); position:relative; }
-    .preview-wrap img { width:100%; height:100%; object-fit:cover; }
-    .rm-img { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.55); color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
-
-    .url-input-row { margin-top: 0.6rem; }
-    .url-or { font-size: 0.72rem; color: #aaa; text-align: center; margin: 0.4rem 0; }
-    .url-paste { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.82rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; background: var(--bg); color: var(--text); }
-    .url-paste:focus { border-color: var(--red); background: var(--white); }
+    /* PREVIEW */
+    .img-preview { margin-top: 0.8rem; display: none; }
+    .img-preview img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; border: 1.5px solid var(--border); display: block; }
+    .btn-rm-preview { margin-top: 6px; background: none; border: none; color: var(--danger); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; padding: 2px 0; }
+    .btn-rm-preview:hover { text-decoration: underline; }
 
     .btn-add {
       background: linear-gradient(135deg, var(--red), var(--red-dark));
-      color: var(--white); font-size: 0.92rem; font-weight: 700;
-      padding: 11px 26px; border-radius: 50px; border: none; cursor: pointer;
-      margin-top: 1.2rem; display: inline-flex; align-items: center; gap: 8px;
-      transition: opacity 0.2s; font-family: 'Inter', sans-serif; letter-spacing: 0.2px;
+      color: white; font-size: 0.92rem; font-weight: 700;
+      padding: 11px 28px; border-radius: 50px; border: none; cursor: pointer;
+      margin-top: 1.4rem; display: inline-flex; align-items: center; gap: 8px;
+      transition: opacity 0.2s; font-family: 'Inter', sans-serif;
     }
     .btn-add:hover { opacity: 0.88; }
 
-    /* PRODUCTS LIST */
-    .list-box {
-      background: var(--white); border-radius: 16px; padding: 2rem;
+    /* LIST */
+    .list-card {
+      background: white; border-radius: 16px; padding: 1.8rem 2rem;
       box-shadow: 0 2px 12px rgba(0,0,0,0.05);
     }
-    .lb-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; gap:0.8rem; flex-wrap:wrap; }
-    .lb-head h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--red-dark); }
-    .lb-count { background:var(--gold-lt); color:var(--gold-dark); font-size:0.68rem; font-weight:700; padding:3px 10px; border-radius:10px; border:1px solid rgba(168,134,42,0.3); }
+    .list-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.4rem; flex-wrap: wrap; gap: 0.8rem; }
+    .list-head h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--red-dark); }
+    .count-badge { background: var(--gold-lt); color: var(--gold-dark); font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 10px; border: 1px solid rgba(168,134,42,0.3); }
+    .btn-clear-all { background: rgba(184,41,30,0.07); color: var(--danger); border: 1.5px solid rgba(184,41,30,0.2); font-size: 0.78rem; padding: 5px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; }
+    .btn-clear-all:hover { background: rgba(184,41,30,0.14); }
 
-    .p-row { display:flex; align-items:center; gap:1rem; padding:0.85rem 0; border-bottom:1px solid var(--bg-alt); }
-    .p-row:last-child { border-bottom:none; }
-    .p-img { width:58px; height:58px; border-radius:9px; flex-shrink:0; overflow:hidden; background:linear-gradient(135deg,var(--red-deep),var(--red-dark)); display:flex; align-items:center; justify-content:center; }
-    .p-img img { width:100%; height:100%; object-fit:cover; }
-    .p-img svg { opacity:0.6; }
-    .p-info { flex:1; min-width:0; }
-    .p-name { font-size:0.87rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .p-meta { font-size:0.72rem; color:var(--text-mid); margin-top:2px; }
-    .p-price { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--red); flex-shrink:0; }
-    .btn-del { background:rgba(184,41,30,0.07); color:var(--danger); border:none; width:34px; height:34px; border-radius:8px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
-    .btn-del:hover { background:rgba(184,41,30,0.15); }
+    .p-row { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--bg-alt); }
+    .p-row:last-child { border-bottom: none; }
+    .p-thumb { width: 60px; height: 60px; border-radius: 10px; flex-shrink: 0; overflow: hidden; background: var(--bg-alt); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .p-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .p-info { flex: 1; min-width: 0; }
+    .p-name  { font-size: 0.88rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .p-price { font-size: 0.78rem; color: var(--red); font-weight: 600; margin-top: 2px; }
+    .btn-del { background: rgba(184,41,30,0.07); color: var(--danger); border: none; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .btn-del:hover { background: rgba(184,41,30,0.16); }
 
-    .no-prods { text-align:center; padding:2.5rem 1rem; }
-    .no-prods .np-icon { margin-bottom:0.6rem; display:flex; justify-content:center; opacity:0.35; }
-    .no-prods p { font-size:0.82rem; color:var(--text-mid); }
+    .no-items { text-align: center; padding: 3rem 1rem; color: var(--text-mid); font-size: 0.88rem; }
+    .no-items svg { opacity: 0.2; margin: 0 auto 0.8rem; display: block; }
 
     /* SETTINGS */
-    .settings-box { background:var(--white); border-radius:16px; padding:2rem; box-shadow:0 2px 12px rgba(0,0,0,0.05); max-width:420px; margin-bottom:1.5rem; }
-    .settings-box h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--red-dark); margin-bottom:0.25rem; }
-    .settings-box .s-sub { font-size:0.81rem; color:var(--text-mid); margin-bottom:1.4rem; }
+    .settings-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); max-width: 420px; margin-bottom: 1.5rem; }
+    .settings-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--red-dark); margin-bottom: 0.25rem; }
+    .settings-card .s-sub { font-size: 0.82rem; color: var(--text-mid); margin-bottom: 1.4rem; }
+    .settings-card .fg { margin-bottom: 0.9rem; }
+
+    /* LEADS */
+    .lead-row { display: flex; gap: 1rem; align-items: center; padding: 0.85rem 0; border-bottom: 1px solid var(--bg-alt); font-size: 0.84rem; }
+    .lead-row:last-child { border-bottom: none; }
+    .lead-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gold-lt); border: 1.5px solid rgba(168,134,42,0.3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .lead-name  { font-weight: 600; flex: 1; }
+    .lead-phone { font-size: 0.82rem; color: var(--text-mid); }
+    .lead-time  { font-size: 0.7rem; color: #bbb; }
 
     /* TOAST */
-    .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--red-dark); color:#fff; padding:11px 24px; border-radius:50px; font-size:0.83rem; font-weight:600; z-index:9999; box-shadow:0 4px 20px rgba(0,0,0,0.3); opacity:0; pointer-events:none; transition:opacity 0.3s; display:flex; align-items:center; gap:8px; white-space:nowrap; }
-    .toast.show { opacity:1; }
-    .toast.ok   { background:var(--success); }
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--red-dark); color: white; padding: 11px 24px; border-radius: 50px; font-size: 0.83rem; font-weight: 600; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.3s; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+    .toast.ok   { background: var(--success); }
 
-    /* Leads section */
-    .leads-box { background:var(--white); border-radius:16px; padding:2rem; box-shadow:0 2px 12px rgba(0,0,0,0.05); }
-    .lead-row { display:flex; gap:1rem; align-items:center; padding:0.85rem 0; border-bottom:1px solid var(--bg-alt); font-size:0.84rem; }
-    .lead-row:last-child { border-bottom:none; }
-    .lead-avatar { width:36px; height:36px; border-radius:50%; background:var(--gold-lt); border:1.5px solid rgba(168,134,42,0.3); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-    .lead-name  { font-weight:600; color:var(--text); flex:1; }
-    .lead-phone { font-size:0.82rem; color:var(--text-mid); flex-shrink:0; }
-    .lead-time  { font-size:0.7rem; color:#bbb; flex-shrink:0; }
-
-    /* ORDER CARDS */
-    .order-card { border:1px solid var(--border); border-radius:12px; margin-bottom:1rem; overflow:hidden; background:var(--white); }
-    .order-card-head { display:flex; align-items:center; justify-content:space-between; padding:0.85rem 1rem; background:var(--bg-alt); border-bottom:1px solid var(--border); gap:0.8rem; flex-wrap:wrap; }
-    .order-cust { display:flex; align-items:center; gap:10px; }
-    .order-avatar { width:36px; height:36px; border-radius:50%; background:var(--gold-lt); border:1.5px solid rgba(168,134,42,0.3); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-    .order-name  { font-weight:700; font-size:0.87rem; color:var(--text); }
-    .order-phone { font-size:0.75rem; color:var(--text-mid); }
-    .order-meta  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    .order-time-badge { font-size:0.68rem; color:var(--text-lt); }
-    .btn-wa-chat { background:#25D366; color:#fff; border:none; font-size:0.72rem; font-weight:700; padding:5px 12px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
-    .btn-wa-chat:hover { background:#1da851; }
-    .btn-order-del { background:rgba(184,41,30,0.07); color:var(--danger); border:1px solid rgba(184,41,30,0.2); font-size:0.7rem; padding:4px 10px; border-radius:6px; cursor:pointer; font-family:'Inter',sans-serif; }
-    .btn-order-del:hover { background:rgba(184,41,30,0.14); }
-    .order-items { padding:0.85rem 1rem; display:flex; flex-direction:column; gap:0.7rem; }
-    .order-item-row { display:flex; align-items:center; gap:10px; }
-    .order-item-img { width:52px; height:52px; border-radius:7px; flex-shrink:0; overflow:hidden; background:var(--bg-alt); display:flex; align-items:center; justify-content:center; border:1px solid var(--border); }
-    .order-item-img img { width:100%; height:100%; object-fit:cover; }
-    .order-item-info { flex:1; min-width:0; }
-    .order-item-name  { font-size:0.84rem; font-weight:600; color:var(--text); }
-    .order-item-meta  { font-size:0.73rem; color:var(--text-mid); margin-top:1px; }
-    .order-item-price { font-size:0.8rem; color:var(--red); font-weight:600; flex-shrink:0; }
-    .order-card-foot { padding:0.7rem 1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:var(--bg); font-size:0.8rem; }
-    .order-total-label { color:var(--text-mid); }
-    .order-total-val { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--red); }
-
-    @media (max-width:900px) {
-      .stats-row { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width:640px) {
-      .sidebar { display:none; }
-      .fg-grid { grid-template-columns:1fr; }
-      .stats-row { grid-template-columns:1fr; }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .content { padding: 1.5rem 1rem 4rem; }
+      .topbar { padding: 0 1rem; }
+      .tab-bar { padding: 0 1rem; }
+      .tab-btn { padding: 12px 14px; font-size: 0.8rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
     <div class="login-logo">
-      <svg width="34" height="38" viewBox="0 0 30 34" fill="none">
+      <svg width="32" height="36" viewBox="0 0 30 34" fill="none">
         <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
         <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
         <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.6"/>
       </svg>
-      <div class="login-logo-text">
-        <div class="login-logo-title"><span class="lm">Moti</span><span class="lb"> Bags</span></div>
-        <div class="login-logo-sub">Admin Panel</div>
-      </div>
+      <div class="login-logo-name"><span class="lm">Moti</span><span class="lb">Bags</span></div>
     </div>
-    <h2>Welcome Back</h2>
-    <p>Enter your password to manage products</p>
+    <h2>Admin Login</h2>
+    <p>Enter your password to manage the collection</p>
     <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <button class="btn-login" onclick="doLogin()">Login to Admin Panel</button>
+    <button class="btn-login" onclick="doLogin()">Login</button>
     <p class="login-err" id="loginErr">Incorrect password. Please try again.</p>
-    <p class="login-hint">Default password: <strong>motibags123</strong><br/>Change it in Settings after logging in.</p>
+    <p class="login-hint">Default: <strong>motibags123</strong></p>
   </div>
 </div>
 
-<!-- ── ADMIN WRAP ── -->
+<!-- ADMIN -->
 <div class="admin-wrap" id="adminWrap">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sb-logo">
-      <svg width="28" height="32" viewBox="0 0 30 34" fill="none">
+  <div class="topbar">
+    <div class="tb-logo">
+      <svg width="24" height="28" viewBox="0 0 30 34" fill="none">
         <path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" fill="none"/>
         <rect x="2" y="12" width="26" height="20" rx="3" fill="none" stroke="#C9A84C" stroke-width="2"/>
         <line x1="2" y1="20" x2="28" y2="20" stroke="#B8291E" stroke-width="1.2" stroke-opacity="0.6"/>
       </svg>
       <div>
-        <div class="sb-logo-name"><span class="lm">Moti</span><span class="lb"> Bags</span></div>
-        <div class="sb-logo-sub">Admin Panel</div>
+        <div class="tb-logo-name"><span class="lm">Moti</span><span class="lb">Bags</span></div>
+        <div class="tb-logo-sub">Admin Panel</div>
       </div>
     </div>
-    <nav class="sb-nav">
-      <a href="#" class="active" id="sn-wedding"  onclick="showPanel('wedding'); return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="10" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="10" r="5" stroke="currentColor" stroke-width="1.5"/></svg>
-        Wedding Bags <span class="cnt" id="sc-wedding">0</span>
-      </a>
-      <a href="#" id="sn-birthday" onclick="showPanel('birthday');return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="10" width="14" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 10 L10 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="10" y1="6" x2="10" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
-        Birthday Bags <span class="cnt" id="sc-birthday">0</span>
-      </a>
-      <a href="#" id="sn-naming" onclick="showPanel('naming');return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="13" rx="6" ry="4" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
-        Naming Ceremony <span class="cnt" id="sc-naming">0</span>
-      </a>
-      <a href="#" id="sn-house" onclick="showPanel('house');return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 10 L10 4 L17 10 V17 H3 V10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><rect x="8" y="13" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1.2"/></svg>
-        House Warming <span class="cnt" id="sc-house">0</span>
-      </a>
-      <a href="#" id="sn-orders" onclick="showPanel('orders');return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v2a2 2 0 004 0V2" stroke="currentColor" stroke-width="1.4"/><line x1="6" y1="9" x2="14" y2="9" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="15" x2="10" y2="15" stroke="currentColor" stroke-width="1.2"/></svg>
-        Customer Orders <span class="cnt" id="sc-orders">0</span>
-      </a>
-      <a href="#" id="sn-leads" onclick="showPanel('leads');return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="6" y1="13" x2="11" y2="13" stroke="currentColor" stroke-width="1.2"/></svg>
-        Customer Leads
-      </a>
-      <a href="#" id="sn-settings" onclick="showPanel('settings');return false">
-        <svg class="sb-nav-icon" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Settings
-      </a>
-    </nav>
-    <div class="sb-footer">
-      <a href="index.html" target="_blank" class="btn-view">View Live Site</a>
+    <div class="tb-actions">
+      <a href="index.html" target="_blank" class="btn-view-site">View Site</a>
       <button class="btn-signout" onclick="logout()">Sign Out</button>
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="main-area">
-    <div class="topbar">
-      <h1 id="topbar-title">Wedding Bags</h1>
-      <span class="topbar-badge">Admin</span>
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-collection" onclick="showTab('collection')">Collection</button>
+    <button class="tab-btn" id="tab-leads"      onclick="showTab('leads')">Customer Leads</button>
+    <button class="tab-btn" id="tab-settings"   onclick="showTab('settings')">Settings</button>
+  </div>
+
+  <div class="content">
+
+    <!-- COLLECTION PANEL -->
+    <div class="panel active" id="panel-collection">
+
+      <div class="guide-box">
+        <h4>
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#A8862A" stroke-width="1.8"/><line x1="10" y1="7" x2="10" y2="11" stroke="#A8862A" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.9" fill="#A8862A"/></svg>
+          How to add bag images from Google Drive
+        </h4>
+        <ol class="steps-list">
+          <li>Open <strong>Google Drive</strong> and upload your bag photo</li>
+          <li>Right-click the photo → <strong>Share</strong> → set to <strong>"Anyone with the link"</strong> → click <strong>Copy link</strong></li>
+          <li>Paste it in the <strong>Google Drive Link</strong> field below — a preview will appear</li>
+          <li>Enter the bag name and price, then click <strong>Add to Collection</strong></li>
+          <li>The image instantly shows for <strong>all customers</strong> on the live website!</li>
+        </ol>
+      </div>
+
+      <div class="add-card">
+        <h3>Add New Bag</h3>
+        <p class="card-sub">Paste a Google Drive link or any direct image URL to add a bag to your collection.</p>
+        <div class="form-grid">
+          <div class="fg"><label>Bag Name *</label><input type="text" id="new-name" placeholder="e.g. Royal Silk Wedding Bag"/></div>
+          <div class="fg"><label>Price</label><input type="text" id="new-price" placeholder="e.g. ₹45/bag"/></div>
+          <div class="fg url-area">
+            <label>Google Drive Link (or any image URL) *</label>
+            <input type="text" class="url-paste-input" id="new-url" placeholder="Paste https://drive.google.com/file/d/…/view here" oninput="onUrlInput()"/>
+            <div class="url-hint">Paste your Google Drive share link — it will convert automatically and show a preview below.</div>
+            <div class="img-preview" id="new-preview">
+              <img id="new-preview-img" src="" alt="Preview"/>
+              <button class="btn-rm-preview" onclick="clearPreview()">✕ Remove image</button>
+            </div>
+          </div>
+        </div>
+        <button class="btn-add" onclick="addItem()">+ Add to Collection</button>
+      </div>
+
+      <div class="list-card">
+        <div class="list-head">
+          <h3>Your Collection <span class="count-badge" id="count-badge">0 bags</span></h3>
+          <button class="btn-clear-all" onclick="clearAll()">Clear All</button>
+        </div>
+        <div id="items-list"></div>
+      </div>
     </div>
-    <div class="content">
 
-      <!-- STATS ROW -->
-      <div class="stats-row">
-        <div class="stat-box s-wedding">
-          <div class="stat-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="10" r="5" stroke="#B8291E" stroke-width="1.5"/><circle cx="13" cy="10" r="5" stroke="#B8291E" stroke-width="1.5"/></svg>
-          </div>
-          <div><div class="stat-num" id="sn-w">0</div><div class="stat-lbl">Wedding</div></div>
+    <!-- LEADS PANEL -->
+    <div class="panel" id="panel-leads">
+      <div class="list-card">
+        <div class="list-head">
+          <h3>Customer Leads</h3>
+          <button class="btn-clear-all" onclick="clearLeads()">Clear All</button>
         </div>
-        <div class="stat-box s-birthday">
-          <div class="stat-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="10" width="14" height="8" rx="1.5" stroke="#C07830" stroke-width="1.5"/><path d="M3 10 L10 6 L17 10" stroke="#C07830" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          </div>
-          <div><div class="stat-num" id="sn-b">0</div><div class="stat-lbl">Birthday</div></div>
-        </div>
-        <div class="stat-box s-naming">
-          <div class="stat-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="13" rx="5" ry="3.5" stroke="#C9A84C" stroke-width="1.5"/><circle cx="10" cy="7" r="2.5" stroke="#C9A84C" stroke-width="1.5"/></svg>
-          </div>
-          <div><div class="stat-num" id="sn-n">0</div><div class="stat-lbl">Naming</div></div>
-        </div>
-        <div class="stat-box s-house">
-          <div class="stat-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10 L10 4 L17 10 V17 H3 V10Z" stroke="#A8862A" stroke-width="1.5" stroke-linejoin="round"/><rect x="8" y="13" width="4" height="4" rx="0.5" stroke="#A8862A" stroke-width="1.2"/></svg>
-          </div>
-          <div><div class="stat-num" id="sn-h">0</div><div class="stat-lbl">House Warming</div></div>
-        </div>
+        <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:1.2rem">Customers who entered their name and phone before messaging on WhatsApp.</p>
+        <div id="leads-list"></div>
       </div>
+    </div>
 
-      <!-- WEDDING PANEL -->
-      <div class="s-panel active" id="p-wedding">
-        <div class="guide-box">
-          <h4>
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#A8862A" stroke-width="1.8"/><line x1="6" y1="7" x2="14" y2="7" stroke="#A8862A" stroke-width="1.4"/><line x1="6" y1="10" x2="14" y2="10" stroke="#A8862A" stroke-width="1.4"/><line x1="6" y1="13" x2="10" y2="13" stroke="#A8862A" stroke-width="1.4"/></svg>
-            How to upload your bag photos
-          </h4>
-          <ol class="steps-list">
-            <li>Open <strong>Google Drive</strong> (drive.google.com) and upload your bag photo</li>
-            <li>Right-click the photo → <strong>Share</strong> → change to <strong>"Anyone with the link"</strong> → click <strong>Copy link</strong></li>
-            <li>Paste that link in the <strong>"Paste Google Drive link"</strong> field below — it will convert automatically</li>
-            <li>Fill in the bag name, price, and details</li>
-            <li>Click <strong>Add Bag</strong> — the image shows for <strong>ALL visitors</strong> on the live website!</li>
-          </ol>
-        </div>
-        <div class="upload-box">
-          <h3>Add New Wedding Bag</h3>
-          <p class="ub-sub">Upload a photo and fill in the bag details to show it on the website.</p>
-          <div class="fg-grid">
-            <div class="fg"><label>Bag Name *</label><input id="w-name" type="text" placeholder="e.g. Royal Silk Bag"/></div>
-            <div class="fg"><label>Price *</label><input id="w-price" type="text" placeholder="e.g. ₹45"/></div>
-            <div class="fg full"><label>Description</label><textarea id="w-desc" placeholder="e.g. Premium silk bag with gold foil print, available in all sizes"></textarea></div>
-            <div class="fg"><label>Badge Label (optional)</label><input id="w-badge" type="text" placeholder="e.g. Bestseller, New"/></div>
-            <div class="fg">
-              <label>Photo</label>
-              <div class="drop-zone" id="w-dz">
-                <input type="file" accept="image/*" onchange="previewImg(this,'w')"/>
-                <div class="dz-icon">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
-                </div>
-                <div class="dz-main">Click or drag photo here</div>
-                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
-              </div>
-              <div class="preview-wrap" id="w-prev">
-                <img id="w-prev-img" src="" alt=""/>
-                <button class="rm-img" onclick="removeImg('w')">×</button>
-              </div>
-              <div class="url-input-row">
-                <div class="url-or">— or paste Google Drive / image link —</div>
-                <input type="text" class="url-paste" id="w-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'w')"/>
-              </div>
-            </div>
-          </div>
-          <button class="btn-add" onclick="addProduct('wedding')">+ Add Wedding Bag</button>
-        </div>
-        <div class="list-box">
-          <div class="lb-head"><h3>Wedding Bag Products</h3><span class="lb-count" id="wc-lbl">0 products</span></div>
-          <div id="list-wedding"></div>
-        </div>
+    <!-- SETTINGS PANEL -->
+    <div class="panel" id="panel-settings">
+      <div class="settings-card">
+        <h3>Change Password</h3>
+        <p class="s-sub">Update your admin login password.</p>
+        <div class="fg"><label>Current Password</label><input type="password" id="pw-cur" placeholder="Current password"/></div>
+        <div class="fg"><label>New Password</label><input type="password" id="pw-new" placeholder="Min 6 characters"/></div>
+        <div class="fg"><label>Confirm New Password</label><input type="password" id="pw-cf" placeholder="Re-enter new password"/></div>
+        <button class="btn-add" style="margin-top:0.4rem" onclick="changePw()">Update Password</button>
       </div>
+    </div>
 
-      <!-- BIRTHDAY PANEL -->
-      <div class="s-panel" id="p-birthday">
-        <div class="upload-box">
-          <h3>Add New Birthday Bag</h3>
-          <p class="ub-sub">Upload a birthday bag photo to display on the website.</p>
-          <div class="fg-grid">
-            <div class="fg"><label>Bag Name *</label><input id="b-name" type="text" placeholder="e.g. Unicorn Party Bag"/></div>
-            <div class="fg"><label>Price *</label><input id="b-price" type="text" placeholder="e.g. ₹18"/></div>
-            <div class="fg full"><label>Description</label><textarea id="b-desc" placeholder="e.g. Fun unicorn theme bag for kids' birthday parties"></textarea></div>
-            <div class="fg"><label>Badge Label</label><input id="b-badge" type="text" placeholder="e.g. Kids Fav, Popular"/></div>
-            <div class="fg">
-              <label>Photo</label>
-              <div class="drop-zone" id="b-dz">
-                <input type="file" accept="image/*" onchange="previewImg(this,'b')"/>
-                <div class="dz-icon">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
-                </div>
-                <div class="dz-main">Click or drag photo here</div>
-                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
-              </div>
-              <div class="preview-wrap" id="b-prev">
-                <img id="b-prev-img" src="" alt=""/>
-                <button class="rm-img" onclick="removeImg('b')">×</button>
-              </div>
-              <div class="url-input-row">
-                <div class="url-or">— or paste Google Drive / image link —</div>
-                <input type="text" class="url-paste" id="b-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'b')"/>
-              </div>
-            </div>
-          </div>
-          <button class="btn-add" onclick="addProduct('birthday')">+ Add Birthday Bag</button>
-        </div>
-        <div class="list-box"><div class="lb-head"><h3>Birthday Bag Products</h3><span class="lb-count" id="bc-lbl">0 products</span></div><div id="list-birthday"></div></div>
-      </div>
-
-      <!-- NAMING PANEL -->
-      <div class="s-panel" id="p-naming">
-        <div class="upload-box">
-          <h3>Add New Naming Ceremony Bag</h3>
-          <p class="ub-sub">Upload naming ceremony bag photos to display on the website.</p>
-          <div class="fg-grid">
-            <div class="fg"><label>Bag Name *</label><input id="n-name" type="text" placeholder="e.g. Pastel Baby Bag"/></div>
-            <div class="fg"><label>Price *</label><input id="n-price" type="text" placeholder="e.g. ₹20"/></div>
-            <div class="fg full"><label>Description</label><textarea id="n-desc" placeholder="e.g. Soft pink cotton bag with baby footprint print"></textarea></div>
-            <div class="fg"><label>Badge Label</label><input id="n-badge" type="text" placeholder="e.g. New, Trending"/></div>
-            <div class="fg">
-              <label>Photo</label>
-              <div class="drop-zone" id="n-dz">
-                <input type="file" accept="image/*" onchange="previewImg(this,'n')"/>
-                <div class="dz-icon">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
-                </div>
-                <div class="dz-main">Click or drag photo here</div>
-                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
-              </div>
-              <div class="preview-wrap" id="n-prev">
-                <img id="n-prev-img" src="" alt=""/>
-                <button class="rm-img" onclick="removeImg('n')">×</button>
-              </div>
-              <div class="url-input-row">
-                <div class="url-or">— or paste Google Drive / image link —</div>
-                <input type="text" class="url-paste" id="n-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'n')"/>
-              </div>
-            </div>
-          </div>
-          <button class="btn-add" onclick="addProduct('naming')">+ Add Naming Bag</button>
-        </div>
-        <div class="list-box"><div class="lb-head"><h3>Naming Ceremony Products</h3><span class="lb-count" id="nc-lbl">0 products</span></div><div id="list-naming"></div></div>
-      </div>
-
-      <!-- HOUSE WARMING PANEL -->
-      <div class="s-panel" id="p-house">
-        <div class="upload-box">
-          <h3>Add New House Warming Bag</h3>
-          <p class="ub-sub">Upload house warming bag photos to show on the website.</p>
-          <div class="fg-grid">
-            <div class="fg"><label>Bag Name *</label><input id="h-name" type="text" placeholder="e.g. House Warming Gift Bag"/></div>
-            <div class="fg"><label>Price *</label><input id="h-price" type="text" placeholder="e.g. ₹30"/></div>
-            <div class="fg full"><label>Description</label><textarea id="h-desc" placeholder="e.g. Traditional red jute bag with diya print for house warming guests"></textarea></div>
-            <div class="fg"><label>Badge Label</label><input id="h-badge" type="text" placeholder="e.g. Traditional, New"/></div>
-            <div class="fg">
-              <label>Photo</label>
-              <div class="drop-zone" id="h-dz">
-                <input type="file" accept="image/*" onchange="previewImg(this,'h')"/>
-                <div class="dz-icon">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="20" rx="3" stroke="#8B1A12" stroke-width="1.8" stroke-opacity="0.4"/><circle cx="16" cy="18" r="5" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4"/><path d="M10 8 L12 4 H20 L22 8" stroke="#8B1A12" stroke-width="1.6" stroke-opacity="0.4" stroke-linejoin="round"/></svg>
-                </div>
-                <div class="dz-main">Click or drag photo here</div>
-                <div class="dz-hint">JPG, PNG, WEBP — up to 20MB</div>
-              </div>
-              <div class="preview-wrap" id="h-prev">
-                <img id="h-prev-img" src="" alt=""/>
-                <button class="rm-img" onclick="removeImg('h')">×</button>
-              </div>
-              <div class="url-input-row">
-                <div class="url-or">— or paste Google Drive / image link —</div>
-                <input type="text" class="url-paste" id="h-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'h')"/>
-              </div>
-            </div>
-          </div>
-          <button class="btn-add" onclick="addProduct('house')">+ Add House Warming Bag</button>
-        </div>
-        <div class="list-box"><div class="lb-head"><h3>House Warming Products</h3><span class="lb-count" id="hc-lbl">0 products</span></div><div id="list-house"></div></div>
-      </div>
-
-      <!-- ORDERS PANEL -->
-      <div class="s-panel" id="p-orders">
-        <div class="leads-box">
-          <div class="lb-head">
-            <h3>Customer Orders</h3>
-            <button onclick="clearOrders()" style="background:rgba(184,41,30,0.07);color:var(--danger);border:1.5px solid rgba(184,41,30,0.2);font-size:0.78rem;padding:5px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Inter',sans-serif;">Clear All</button>
-          </div>
-          <p style="font-size:0.81rem;color:var(--text-mid);margin-bottom:1.2rem;">Orders placed by customers through the website cart and sent via WhatsApp.</p>
-          <div id="orders-list"></div>
-        </div>
-      </div>
-
-      <!-- LEADS PANEL -->
-      <div class="s-panel" id="p-leads">
-        <div class="leads-box">
-          <div class="lb-head">
-            <h3>Customer Leads</h3>
-            <button onclick="clearLeads()" style="background:rgba(184,41,30,0.07);color:var(--danger);border:1.5px solid rgba(184,41,30,0.2);font-size:0.78rem;padding:5px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Inter',sans-serif;">Clear All</button>
-          </div>
-          <p style="font-size:0.81rem;color:var(--text-mid);margin-bottom:1rem;">Customers who entered their name and phone number before clicking WhatsApp on your website.</p>
-          <div id="leads-list"></div>
-        </div>
-      </div>
-
-      <!-- SETTINGS PANEL -->
-      <div class="s-panel" id="p-settings">
-        <div class="settings-box">
-          <h3>Change Admin Password</h3>
-          <p class="s-sub">Update your admin panel login password.</p>
-          <div class="fg" style="margin-bottom:0.8rem"><label>Current Password</label><input type="password" id="pw-cur" placeholder="Current password"/></div>
-          <div class="fg" style="margin-bottom:0.8rem"><label>New Password</label><input type="password" id="pw-new" placeholder="Min 6 characters"/></div>
-          <div class="fg" style="margin-bottom:1.2rem"><label>Confirm New Password</label><input type="password" id="pw-cf" placeholder="Re-enter new password"/></div>
-          <button class="btn-add" style="margin-top:0" onclick="changePw()">Update Password</button>
-        </div>
-        <!-- CLOUDINARY SETTINGS -->
-        <div class="settings-box" style="border-top:3px solid var(--gold)">
-          <h3>Image Hosting — Cloudinary</h3>
-          <p class="s-sub">Connect Cloudinary so product photos work for all visitors on all devices at full quality. Free at <strong>cloudinary.com</strong></p>
-          <div style="background:var(--bg-alt);border-radius:8px;padding:1rem;margin-bottom:1.2rem;font-size:0.8rem;line-height:1.7;color:var(--text-mid)">
-            <strong style="color:var(--text);display:block;margin-bottom:0.3rem">Setup steps (2 minutes):</strong>
-            1. Go to <strong>cloudinary.com</strong> → Sign Up Free<br/>
-            2. After login, note your <strong>Cloud Name</strong> (shown on dashboard)<br/>
-            3. Go to <strong>Settings → Upload → Add upload preset</strong><br/>
-            4. Set Signing Mode to <strong>Unsigned</strong> → Save → Copy the preset name<br/>
-            5. Paste both below and click Save
-          </div>
-          <div class="fg" style="margin-bottom:0.8rem">
-            <label>Cloud Name</label>
-            <input type="text" id="cl-name" placeholder="e.g. my-cloud-name"/>
-          </div>
-          <div class="fg" style="margin-bottom:1.2rem">
-            <label>Upload Preset (Unsigned)</label>
-            <input type="text" id="cl-preset" placeholder="e.g. motibags_upload"/>
-          </div>
-          <button class="btn-add" style="margin-top:0" onclick="saveCloudinary()">Save &amp; Connect</button>
-          <div id="cl-status" style="margin-top:0.9rem;font-size:0.8rem;display:none"></div>
-        </div>
-
-        <div class="settings-box" style="border-left:3px solid var(--danger)">
-          <h3>Clear All Products</h3>
-          <p class="s-sub">Permanently delete all products from all categories. This cannot be undone.</p>
-          <button onclick="clearAll()" style="background:rgba(184,41,30,0.07);color:var(--danger);font-size:0.88rem;font-weight:700;padding:10px 24px;border-radius:50px;border:1.5px solid rgba(184,41,30,0.25);cursor:pointer;font-family:'Inter',sans-serif;">Clear All Products</button>
-        </div>
-      </div>
-
-    </div><!-- /content -->
-  </div><!-- /main-area -->
-</div><!-- /admin-wrap -->
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  const PW_KEY   = 'motibags_pw';
-  const DATA_KEY = 'motibags_products';
-  const LEADS_KEY= 'motibags_leads';
-  const LABELS= { wedding:'Wedding', birthday:'Birthday', naming:'Naming Ceremony', house:'House Warming' };
-  const CATS  = ['wedding','birthday','naming','house'];
-  const PFX   = { wedding:'w', birthday:'b', naming:'n', house:'h' };
-  let imgMap  = {};
+  const DATA_KEY  = 'motibags_items';
+  const PW_KEY    = 'motibags_pw';
+  const LEADS_KEY = 'motibags_leads';
 
   /* ── AUTH ── */
   function getpw() { return localStorage.getItem(PW_KEY) || 'motibags123'; }
@@ -654,213 +351,117 @@
     const nw  = document.getElementById('pw-new').value;
     const cf  = document.getElementById('pw-cf').value;
     if (cur !== getpw())  { toast('Current password is incorrect', false); return; }
-    if (nw.length < 6)   { toast('New password must be at least 6 characters', false); return; }
+    if (nw.length < 6)   { toast('Password must be at least 6 characters', false); return; }
     if (nw !== cf)        { toast('Passwords do not match', false); return; }
     localStorage.setItem(PW_KEY, nw);
     ['pw-cur','pw-new','pw-cf'].forEach(id => document.getElementById(id).value = '');
-    toast('Password updated successfully', true);
+    toast('Password updated', true);
   }
 
   /* ── DATA ── */
   function getData() {
-    try { const d = JSON.parse(localStorage.getItem(DATA_KEY)||'{}'); CATS.forEach(c=>{ if(!d[c]) d[c]=[]; }); return d; }
-    catch(e) { return { wedding:[], birthday:[], naming:[], house:[] }; }
+    try { return JSON.parse(localStorage.getItem(DATA_KEY) || '[]'); } catch(e) { return []; }
   }
   function saveData(d) { localStorage.setItem(DATA_KEY, JSON.stringify(d)); }
-  function clearAll() {
-    if (!confirm('Delete ALL products from all categories?')) return;
-    saveData({ wedding:[], birthday:[], naming:[], house:[] });
-    refreshAll(); toast('All products cleared');
-  }
 
-  /* ── CLOUDINARY ── */
-  function getCloud() {
-    return { name: localStorage.getItem('mb_cloud_name')||'', preset: localStorage.getItem('mb_cloud_preset')||'' };
-  }
-  function saveCloudinary() {
-    const name   = document.getElementById('cl-name').value.trim();
-    const preset = document.getElementById('cl-preset').value.trim();
-    if (!name || !preset) { toast('Enter both Cloud Name and Upload Preset', false); return; }
-    localStorage.setItem('mb_cloud_name',   name);
-    localStorage.setItem('mb_cloud_preset', preset);
-    showCloudStatus();
-    toast('Cloudinary connected — images will now upload to cloud', true);
-  }
-  function showCloudStatus() {
-    const { name } = getCloud();
-    const el = document.getElementById('cl-status');
-    if (!el) return;
-    if (name) {
-      el.style.display = 'block';
-      el.innerHTML = `<span style="color:var(--success);font-weight:600">Connected</span> — Cloud: <strong>${esc(name)}</strong>. Photos upload to Cloudinary at full quality.`;
-    } else {
-      el.style.display = 'block';
-      el.innerHTML = `<span style="color:var(--text-mid)">Not configured — photos are stored locally (won't show on live site for other visitors).</span>`;
-    }
-  }
-
-  /* ── IMAGE URL (Google Drive / direct link) ── */
-  function convertImageUrl(url) {
+  /* ── URL CONVERSION ── */
+  function convertUrl(url) {
+    url = url.trim();
     const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
     if (m1) return 'https://lh3.googleusercontent.com/d/' + m1[1];
     const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if (m2) return 'https://lh3.googleusercontent.com/d/' + m2[1];
     return url;
   }
-  function previewUrl(input, pfx) {
-    const url = input.value.trim();
-    if (!url) return;
-    const imgUrl = convertImageUrl(url);
-    imgMap[pfx] = imgUrl;
-    const dz = document.getElementById(pfx+'-dz');
-    const pw = document.getElementById(pfx+'-prev');
-    dz.style.display = 'none';
-    pw.style.display = 'block';
-    document.getElementById(pfx+'-prev-img').src = imgUrl;
-    toast('Image link saved — visible to all visitors!', true);
+
+  function onUrlInput() {
+    const raw = document.getElementById('new-url').value.trim();
+    const preview = document.getElementById('new-preview');
+    const img     = document.getElementById('new-preview-img');
+    if (!raw) { preview.style.display = 'none'; img.src = ''; return; }
+    const url = convertUrl(raw);
+    img.src = url;
+    img.onload  = () => { preview.style.display = 'block'; };
+    img.onerror = () => { preview.style.display = 'none'; };
   }
 
-  /* ── IMAGE (file upload) ── */
-  async function previewImg(input, pfx) {
-    const f = input.files[0];
-    if (!f) return;
-    const dz   = document.getElementById(pfx+'-dz');
-    const pw   = document.getElementById(pfx+'-prev');
-    const main = dz.querySelector('.dz-main');
-    const hint = dz.querySelector('.dz-hint');
-    const { name, preset } = getCloud();
-
-    if (name && preset) {
-      /* ── Upload to Cloudinary ── */
-      if (f.size > 20*1024*1024) { toast('Image must be under 20MB', false); return; }
-      const origMain = main.textContent;
-      const origHint = hint.textContent;
-      main.textContent = 'Uploading to cloud…';
-      hint.textContent = 'Please wait';
-      dz.style.opacity = '0.6';
-      dz.style.pointerEvents = 'none';
-      try {
-        const fd = new FormData();
-        fd.append('file', f);
-        fd.append('upload_preset', preset);
-        const res  = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(name)}/image/upload`, { method:'POST', body:fd });
-        const data = await res.json();
-        if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
-        imgMap[pfx] = data.secure_url;
-        dz.style.display = 'none';
-        pw.style.display = 'block';
-        document.getElementById(pfx+'-prev-img').src = data.secure_url;
-        toast('Image uploaded to cloud', true);
-      } catch(err) {
-        main.textContent = origMain;
-        hint.textContent = origHint;
-        dz.style.opacity = '1';
-        dz.style.pointerEvents = '';
-        toast('Upload failed: ' + err.message, false);
-      }
-    } else {
-      /* ── Base64 fallback (local only) ── */
-      if (f.size > 5*1024*1024) { toast('Image must be under 5MB. Set up Cloudinary in Settings for larger files.', false); return; }
-      const r = new FileReader();
-      r.onload = function(e) {
-        imgMap[pfx] = e.target.result;
-        dz.style.display = 'none';
-        pw.style.display = 'block';
-        document.getElementById(pfx+'-prev-img').src = e.target.result;
-      };
-      r.readAsDataURL(f);
-    }
-  }
-  function removeImg(pfx) {
-    imgMap[pfx] = null;
-    const dz = document.getElementById(pfx+'-dz');
-    dz.style.display = 'block';
-    dz.style.opacity = '1';
-    dz.style.pointerEvents = '';
-    document.getElementById(pfx+'-prev').style.display = 'none';
-    document.getElementById(pfx+'-prev-img').src = '';
-    dz.querySelector('input[type=file]').value = '';
-    const urlInput = document.getElementById(pfx+'-url');
-    if (urlInput) urlInput.value = '';
+  function clearPreview() {
+    document.getElementById('new-url').value = '';
+    document.getElementById('new-preview').style.display = 'none';
+    document.getElementById('new-preview-img').src = '';
   }
 
   /* ── ADD ── */
-  function addProduct(cat) {
-    const pfx   = PFX[cat];
-    const name  = document.getElementById(pfx+'-name').value.trim();
-    const price = document.getElementById(pfx+'-price').value.trim();
-    const desc  = document.getElementById(pfx+'-desc').value.trim();
-    const badge = document.getElementById(pfx+'-badge').value.trim();
-    const img   = imgMap[pfx] || '';
-    if (!name)  { toast('Please enter a bag name', false); return; }
-    if (!price) { toast('Please enter a price', false); return; }
+  function addItem() {
+    const name  = document.getElementById('new-name').value.trim();
+    const price = document.getElementById('new-price').value.trim();
+    const raw   = document.getElementById('new-url').value.trim();
+    if (!name) { toast('Please enter a bag name', false); return; }
+    if (!raw)  { toast('Please paste a Google Drive or image link', false); return; }
+    const img = convertUrl(raw);
     const data = getData();
-    data[cat].push({ id: Date.now().toString(), name, price, desc, badge, img });
+    data.push({ id: Date.now().toString(), name, price, img });
     saveData(data);
-    document.getElementById(pfx+'-name').value  = '';
-    document.getElementById(pfx+'-price').value = '';
-    document.getElementById(pfx+'-desc').value  = '';
-    document.getElementById(pfx+'-badge').value = '';
-    removeImg(pfx);
-    refreshAll();
-    toast('"' + name + '" added to ' + LABELS[cat] + ' bags', true);
+    document.getElementById('new-name').value  = '';
+    document.getElementById('new-price').value = '';
+    clearPreview();
+    renderList();
+    toast('"' + name + '" added to collection', true);
   }
 
   /* ── DELETE ── */
-  function delProduct(cat, id) {
-    if (!confirm('Delete this product?')) return;
-    const data = getData();
-    data[cat] = data[cat].filter(p => p.id !== id);
-    saveData(data);
-    refreshAll();
-    toast('Product deleted');
+  function deleteItem(id) {
+    if (!confirm('Remove this bag from the collection?')) return;
+    saveData(getData().filter(i => i.id !== id));
+    renderList();
+    toast('Bag removed');
+  }
+  function clearAll() {
+    if (!confirm('Remove ALL bags from the collection? This cannot be undone.')) return;
+    saveData([]);
+    renderList();
+    toast('Collection cleared');
   }
 
-  /* ── RENDER LIST ── */
-  const BAG_SVG = `<svg width="26" height="26" viewBox="0 0 30 34" fill="none"><path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/><rect x="2" y="12" width="26" height="20" rx="3" stroke="#C9A84C" stroke-width="2"/></svg>`;
+  /* ── RENDER ── */
   const DEL_SVG = `<svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M8 6V4h4v2M9 10v5M11 10v5M5 6l1 11h8l1-11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const BAG_SVG = `<svg width="26" height="26" viewBox="0 0 30 34" fill="none"><path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/><rect x="2" y="12" width="26" height="20" rx="3" stroke="#C9A84C" stroke-width="2"/></svg>`;
 
-  function renderList(cat) {
-    const pfx   = PFX[cat];
-    const data  = getData();
-    const items = data[cat] || [];
-    const listEl = document.getElementById('list-' + cat);
-    const lblEl  = document.getElementById(pfx[0]+'c-lbl');
-    const cntEl  = document.getElementById('sc-' + cat);
-    const statEl = document.getElementById('sn-' + pfx[0]);
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
-    if (lblEl)  lblEl.textContent  = items.length + ' product' + (items.length!==1?'s':'');
-    if (cntEl)  cntEl.textContent  = items.length;
-    if (statEl) statEl.textContent = items.length;
-
-    if (!listEl) return;
+  function renderList() {
+    const items = getData();
+    const el    = document.getElementById('items-list');
+    const badge = document.getElementById('count-badge');
+    if (badge) badge.textContent = items.length + ' bag' + (items.length !== 1 ? 's' : '');
+    if (!el) return;
     if (items.length === 0) {
-      listEl.innerHTML = `<div class="no-prods"><div class="np-icon">${BAG_SVG}</div><p>No products yet. Add your first ${LABELS[cat]} bag above.</p></div>`;
+      el.innerHTML = `<div class="no-items">${BAG_SVG}<p>No bags yet. Add your first bag above.</p></div>`;
       return;
     }
-    listEl.innerHTML = items.map(p => `
+    el.innerHTML = items.map(item => `
       <div class="p-row">
-        <div class="p-img">${p.img ? `<img src="${esc(p.img)}" alt="">` : BAG_SVG}</div>
-        <div class="p-info">
-          <div class="p-name">${esc(p.name)}</div>
-          <div class="p-meta">${esc(p.desc ? p.desc.substring(0,60)+(p.desc.length>60?'…':'') : 'No description')}</div>
+        <div class="p-thumb">
+          ${item.img ? `<img src="${esc(item.img)}" alt="" onerror="this.parentElement.innerHTML='${BAG_SVG.replace(/'/g,"\\'")}'">`  : BAG_SVG}
         </div>
-        <div class="p-price">${esc(p.price)}</div>
-        <button class="btn-del" onclick="delProduct('${cat}','${p.id}')" title="Delete">${DEL_SVG}</button>
+        <div class="p-info">
+          <div class="p-name">${esc(item.name)}</div>
+          ${item.price ? `<div class="p-price">${esc(item.price)}</div>` : ''}
+        </div>
+        <button class="btn-del" onclick="deleteItem('${item.id}')" title="Remove">${DEL_SVG}</button>
       </div>`).join('');
   }
 
   /* ── LEADS ── */
-  function getLeads() {
-    try { return JSON.parse(localStorage.getItem(LEADS_KEY) || '[]'); } catch(e){ return []; }
-  }
-  const USER_SVG = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="#A8862A" stroke-width="1.5"/><path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#A8862A" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  const USER_SVG = `<svg width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="#A8862A" stroke-width="1.5"/><path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#A8862A" stroke-width="1.5" stroke-linecap="round"/></svg>`;
   function renderLeads() {
-    const leads = getLeads();
-    const el = document.getElementById('leads-list');
+    const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
+    const el    = document.getElementById('leads-list');
     if (!el) return;
     if (leads.length === 0) {
-      el.innerHTML = `<div class="no-prods"><div class="np-icon"><svg width="36" height="36" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#ccc" stroke-width="1.5"/><line x1="6" y1="7" x2="14" y2="7" stroke="#ccc" stroke-width="1.2"/><line x1="6" y1="10" x2="14" y2="10" stroke="#ccc" stroke-width="1.2"/><line x1="6" y1="13" x2="10" y2="13" stroke="#ccc" stroke-width="1.2"/></svg></div><p>No leads yet. They appear when customers enter their name on the website.</p></div>`;
+      el.innerHTML = `<div class="no-items"><p>No leads yet. They appear when customers enter their name on the website.</p></div>`;
       return;
     }
     el.innerHTML = leads.slice().reverse().map(l => `
@@ -878,152 +479,27 @@
     toast('Leads cleared');
   }
 
-  /* ── ORDERS ── */
-  const ORDERS_KEY = 'motibags_orders';
-  function getOrders() {
-    try { return JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]'); } catch(e) { return []; }
-  }
-  function deleteOrder(id) {
-    if (!confirm('Delete this order?')) return;
-    const orders = getOrders().filter(o => o.id !== id);
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    renderOrders();
-    refreshOrderCount();
-    toast('Order deleted');
-  }
-  function clearOrders() {
-    if (!confirm('Clear all orders?')) return;
-    localStorage.removeItem(ORDERS_KEY);
-    renderOrders();
-    refreshOrderCount();
-    toast('Orders cleared');
-  }
-  function refreshOrderCount() {
-    const n = getOrders().length;
-    const el = document.getElementById('sc-orders');
-    if (el) el.textContent = n;
-  }
-  function renderOrders() {
-    const orders = getOrders();
-    const el = document.getElementById('orders-list');
-    if (!el) return;
-    refreshOrderCount();
-    if (orders.length === 0) {
-      el.innerHTML = `<div class="no-prods"><div class="np-icon">${BAG_SVG}</div><p>No orders yet. They appear here when customers send their cart via WhatsApp.</p></div>`;
-      return;
-    }
-    const BAG_SM = `<svg width="24" height="24" viewBox="0 0 30 34" fill="none"><path d="M9 13 C9 6 21 6 21 13" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/><rect x="2" y="12" width="26" height="20" rx="3" stroke="#C9A84C" stroke-width="2"/></svg>`;
-    const WA_SVG = `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`;
-    el.innerHTML = orders.slice().reverse().map(order => {
-      let totalVal = 0; let canCalc = true;
-      order.items.forEach(item => {
-        const n = parseFloat(String(item.price).replace(/[^0-9.]/g, ''));
-        if (isNaN(n)) canCalc = false; else totalVal += n * item.qty;
-      });
-      const totalItems = order.items.reduce((s, i) => s + i.qty, 0);
-      const waLink = order.phone ? `https://wa.me/${order.phone.replace(/[^0-9]/g,'')}` : '#';
-      return `<div class="order-card">
-        <div class="order-card-head">
-          <div class="order-cust">
-            <div class="order-avatar">${USER_SVG}</div>
-            <div>
-              <div class="order-name">${esc(order.name)}</div>
-              <div class="order-phone">${esc(order.phone||'')}</div>
-            </div>
-          </div>
-          <div class="order-meta">
-            <span class="order-time-badge">${order.time||''}</span>
-            ${order.phone ? `<a class="btn-wa-chat" href="${waLink}" target="_blank">${WA_SVG} Chat</a>` : ''}
-            <button class="btn-order-del" onclick="deleteOrder('${order.id}')">Delete</button>
-          </div>
-        </div>
-        <div class="order-items">
-          ${order.items.map(item => `
-            <div class="order-item-row">
-              <div class="order-item-img">
-                ${item.img ? `<img src="${esc(item.img)}" alt="" onerror="this.style.display='none'">` : BAG_SM}
-              </div>
-              <div class="order-item-info">
-                <div class="order-item-name">${esc(item.name)}</div>
-                <div class="order-item-meta">${esc(item.cat)} &mdash; Qty: ${item.qty}</div>
-              </div>
-              <div class="order-item-price">${esc(item.price)}</div>
-            </div>`).join('')}
-        </div>
-        <div class="order-card-foot">
-          <span class="order-total-label">${totalItems} bag${totalItems!==1?'s':''}</span>
-          <span class="order-total-val">${canCalc ? '₹'+totalVal : 'As quoted'}</span>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  function refreshAll() {
-    CATS.forEach(renderList);
-    renderLeads();
-    renderOrders();
-    const data = getData();
-    document.getElementById('sn-w').textContent = (data.wedding||[]).length;
-    document.getElementById('sn-b').textContent = (data.birthday||[]).length;
-    document.getElementById('sn-n').textContent = (data.naming||[]).length;
-    document.getElementById('sn-h').textContent = (data.house||[]).length;
-  }
-
-  /* ── PANEL SWITCH ── */
-  function showPanel(name) {
-    const allPanels = ['wedding','birthday','naming','house','orders','leads','settings'];
-    allPanels.forEach(p => {
-      const el = document.getElementById('p-' + p);
-      const sn = document.getElementById('sn-' + p);
-      if (el) el.classList.toggle('active', p === name);
-      if (sn) sn.classList.toggle('active', p === name);
+  /* ── TABS ── */
+  function showTab(name) {
+    ['collection','leads','settings'].forEach(t => {
+      document.getElementById('panel-' + t).classList.toggle('active', t === name);
+      document.getElementById('tab-'   + t).classList.toggle('active', t === name);
     });
-    const titles = { wedding:'Wedding Bags', birthday:'Birthday Bags', naming:'Naming Ceremony', house:'House Warming', orders:'Customer Orders', leads:'Customer Leads', settings:'Settings' };
-    document.getElementById('topbar-title').textContent = titles[name] || name;
+    if (name === 'leads') renderLeads();
   }
 
-  /* ── DRAG DROP ── */
-  document.querySelectorAll('.drop-zone').forEach(zone => {
-    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
-    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
-    zone.addEventListener('drop', e => {
-      e.preventDefault(); zone.classList.remove('over');
-      const f = e.dataTransfer.files[0];
-      if (!f || !f.type.startsWith('image/')) return;
-      const pfx = zone.id.split('-')[0];
-      const dt = new DataTransfer(); dt.items.add(f);
-      const fi = zone.querySelector('input[type=file]');
-      fi.files = dt.files;
-      previewImg(fi, pfx);
-    });
-  });
+  function refreshAll() { renderList(); renderLeads(); }
 
   /* ── TOAST ── */
   function toast(msg, ok = false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast show' + (ok ? ' ok' : '');
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  /* ── SYNC LEADS FROM INDEX ── */
-  window.addEventListener('storage', function(e) {
-    if (e.key === LEADS_KEY)   renderLeads();
-    if (e.key === ORDERS_KEY)  { renderOrders(); refreshOrderCount(); }
-  });
-
-  /* ── INIT CLOUDINARY SETTINGS FIELDS ── */
-  document.addEventListener('DOMContentLoaded', function() {
-    const { name, preset } = getCloud();
-    if (name)   document.getElementById('cl-name').value   = name;
-    if (preset) document.getElementById('cl-preset').value = preset;
-    showCloudStatus();
-  });
+  window.addEventListener('storage', e => { if (e.key === DATA_KEY) renderList(); if (e.key === LEADS_KEY) renderLeads(); });
 </script>
 </body>
 </html>
