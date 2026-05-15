@@ -190,6 +190,11 @@
     .preview-wrap img { width:100%; height:100%; object-fit:cover; }
     .rm-img { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.55); color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
 
+    .url-input-row { margin-top: 0.6rem; }
+    .url-or { font-size: 0.72rem; color: #aaa; text-align: center; margin: 0.4rem 0; }
+    .url-paste { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.82rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; background: var(--bg); color: var(--text); }
+    .url-paste:focus { border-color: var(--red); background: var(--white); }
+
     .btn-add {
       background: linear-gradient(135deg, var(--red), var(--red-dark));
       color: var(--white); font-size: 0.92rem; font-weight: 700;
@@ -399,11 +404,11 @@
             How to upload your bag photos
           </h4>
           <ol class="steps-list">
-            <li>Create a folder called <code>images</code> inside your <code>moti-bags</code> folder on your computer</li>
-            <li>Inside <code>images</code>, create 4 sub-folders: <code>wedding</code>, <code>birthday</code>, <code>naming</code>, <code>house</code></li>
-            <li>Copy your bag photos into the correct folder (e.g. <code>images/wedding/bag1.jpg</code>)</li>
-            <li>In the form below — click <strong>Choose Photo</strong>, select the image, fill in the details</li>
-            <li>Click <strong>Add Bag</strong> — it instantly appears on the website for customers to see!</li>
+            <li>Open <strong>Google Drive</strong> (drive.google.com) and upload your bag photo</li>
+            <li>Right-click the photo → <strong>Share</strong> → change to <strong>"Anyone with the link"</strong> → click <strong>Copy link</strong></li>
+            <li>Paste that link in the <strong>"Paste Google Drive link"</strong> field below — it will convert automatically</li>
+            <li>Fill in the bag name, price, and details</li>
+            <li>Click <strong>Add Bag</strong> — the image shows for <strong>ALL visitors</strong> on the live website!</li>
           </ol>
         </div>
         <div class="upload-box">
@@ -427,6 +432,10 @@
               <div class="preview-wrap" id="w-prev">
                 <img id="w-prev-img" src="" alt=""/>
                 <button class="rm-img" onclick="removeImg('w')">×</button>
+              </div>
+              <div class="url-input-row">
+                <div class="url-or">— or paste Google Drive / image link —</div>
+                <input type="text" class="url-paste" id="w-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'w')"/>
               </div>
             </div>
           </div>
@@ -462,6 +471,10 @@
                 <img id="b-prev-img" src="" alt=""/>
                 <button class="rm-img" onclick="removeImg('b')">×</button>
               </div>
+              <div class="url-input-row">
+                <div class="url-or">— or paste Google Drive / image link —</div>
+                <input type="text" class="url-paste" id="b-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'b')"/>
+              </div>
             </div>
           </div>
           <button class="btn-add" onclick="addProduct('birthday')">+ Add Birthday Bag</button>
@@ -493,6 +506,10 @@
                 <img id="n-prev-img" src="" alt=""/>
                 <button class="rm-img" onclick="removeImg('n')">×</button>
               </div>
+              <div class="url-input-row">
+                <div class="url-or">— or paste Google Drive / image link —</div>
+                <input type="text" class="url-paste" id="n-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'n')"/>
+              </div>
             </div>
           </div>
           <button class="btn-add" onclick="addProduct('naming')">+ Add Naming Bag</button>
@@ -523,6 +540,10 @@
               <div class="preview-wrap" id="h-prev">
                 <img id="h-prev-img" src="" alt=""/>
                 <button class="rm-img" onclick="removeImg('h')">×</button>
+              </div>
+              <div class="url-input-row">
+                <div class="url-or">— or paste Google Drive / image link —</div>
+                <input type="text" class="url-paste" id="h-url" placeholder="https://drive.google.com/file/d/…/view" oninput="previewUrl(this,'h')"/>
               </div>
             </div>
           </div>
@@ -678,7 +699,28 @@
     }
   }
 
-  /* ── IMAGE ── */
+  /* ── IMAGE URL (Google Drive / direct link) ── */
+  function convertImageUrl(url) {
+    const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (m1) return 'https://lh3.googleusercontent.com/d/' + m1[1];
+    const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (m2) return 'https://lh3.googleusercontent.com/d/' + m2[1];
+    return url;
+  }
+  function previewUrl(input, pfx) {
+    const url = input.value.trim();
+    if (!url) return;
+    const imgUrl = convertImageUrl(url);
+    imgMap[pfx] = imgUrl;
+    const dz = document.getElementById(pfx+'-dz');
+    const pw = document.getElementById(pfx+'-prev');
+    dz.style.display = 'none';
+    pw.style.display = 'block';
+    document.getElementById(pfx+'-prev-img').src = imgUrl;
+    toast('Image link saved — visible to all visitors!', true);
+  }
+
+  /* ── IMAGE (file upload) ── */
   async function previewImg(input, pfx) {
     const f = input.files[0];
     if (!f) return;
@@ -738,6 +780,8 @@
     document.getElementById(pfx+'-prev').style.display = 'none';
     document.getElementById(pfx+'-prev-img').src = '';
     dz.querySelector('input[type=file]').value = '';
+    const urlInput = document.getElementById(pfx+'-url');
+    if (urlInput) urlInput.value = '';
   }
 
   /* ── ADD ── */
